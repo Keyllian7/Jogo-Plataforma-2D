@@ -31,7 +31,7 @@ imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 # Carregar sprites
 spritesheet_andar_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
 spritesheet_andar_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
-sprite_inimigo = pygame.image.load(os.path.join(diretorio_imagens, 'java.png')).convert_alpha()
+sprite_inimigo = pygame.image.load(os.path.join(diretorio_imagens, 'Java.png')).convert_alpha()
 
 # Redimensionar a imagem do inimigo
 largura_inimigo = 50  
