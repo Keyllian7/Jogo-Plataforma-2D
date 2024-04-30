@@ -31,7 +31,7 @@ imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 # Carregar sprites
 spritesheet_andar_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
 spritesheet_andar_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
-sprite_inimigo = pygame.image.load(os.path.join(diretorio_imagens, 'java.png')).convert_alpha()
+sprite_inimigo = pygame.image.load(os.path.join(diretorio_imagens, 'Java.png')).convert_alpha()
 
 # Redimensionar a imagem do inimigo
 largura_inimigo = 50  
@@ -50,7 +50,7 @@ inimigos.append(Inimigo(sprite_inimigo, 200, 200))
 
 #Variavel para o pulo do player
 pulando = False
-velocidade_do_pulo = -10
+velocidade_do_pulo = -20
 
 # Controle de FPS
 fps = pygame.time.Clock()
@@ -105,7 +105,7 @@ while True:
         # Verifica se o personagem atingiu o chão e reinicia o comando
         if personagem.rect.y >= 460:
             pulando = False
-            velocidade_do_pulo = -10
+            velocidade_do_pulo = -20
 
     # Desenha o personagem na tela
     sprites_personagem.draw(tela)
