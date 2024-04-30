@@ -2,6 +2,7 @@
 import pygame
 from pygame.locals import *
 from sys import exit
+from player import Personagem
 import os
 
 import pygame.locals
@@ -13,18 +14,18 @@ diretorio_sons = os.path.join(diretorio_principal, 'Assets Sons')
 
 pygame.init()
 
-# Resolução da tela
+# Tamanho da matriz de pixels em que o jogo será reproduzido.
 largura = 960
 altura = 540
 
-# Cores
-branco = (255, 255, 255)
-
-# Criação da tela
+# Criação da variável e argumentos para a execução da matriz.
 tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('UNP')
 
-#Imagem de funfo
+# Variáveis que contém valores RGB.
+branco = (255, 255, 255)
+
+#Imagem de fundo
 imagem_de_fundo = pygame.image.load(os.path.join(diretorio_imagens, 'Background.png'))
 imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 
@@ -32,50 +33,15 @@ imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 spritesheet_andar_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
 spritesheet_andar_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
 
-# Classe do Personagem
-class Personagem(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.andar_direita = []
-        self.andar_esquerda = []
-        for i in range(8):
-            img = spritesheet_andar_direita.subsurface((i * 64, 0), (64, 47))
-            self.andar_direita.append(img)
-            img = spritesheet_andar_esquerda.subsurface((i * 64, 0), (64, 47))
-            self.andar_esquerda.append(img)
-
-        self.index_lista = 0
-        self.image = self.andar_direita[self.index_lista]
-        self.rect = self.image.get_rect()
-        self.rect.center = (100, 100)
-        self.direction = 'right'
-
-        #Tamanho do personagem
-        self.image = pygame.transform.scale(self.image, (int(64*1.5), int(47*1.5)))
-
-        #Posição do personagem na tela
-        self.rect = self.image.get_rect()
-        self.rect.topleft = 0, 460
-
-    # Atualiza a imagem do personagem de acordo com a direção do movimento
-    def update(self):
-        self.index_lista += 0.25
-        if self.index_lista >= len(self.andar_direita):
-            self.index_lista -= len(self.andar_direita)
-        if self.direction == 'right':
-            self.image = self.andar_direita[int(self.index_lista)]
-        elif self.direction == 'left':
-            self.image = self.andar_esquerda[int(self.index_lista)]
-        self.image = pygame.transform.scale(self.image, (int(64*1.5), int(47*1.5)))
 
 # Criação do personagem
-personagem = Personagem()
+personagem = Personagem(spritesheet_andar_direita, spritesheet_andar_esquerda)
 sprites_personagem = pygame.sprite.Group()
 sprites_personagem.add(personagem)
 
 #Variavel para o pulo do player
 pulando = False
-velocidade_do_pulo = -10
+velocidade_do_pulo = -20
 
 # Controle de FPS
 fps = pygame.time.Clock()
