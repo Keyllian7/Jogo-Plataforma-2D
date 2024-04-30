@@ -73,7 +73,7 @@ while True:
         direcao_x /= distancia
         direcao_y /= distancia
         
-        velocidade = 3
+        velocidade = 2
         
         inimigo.rect.x += direcao_x * velocidade
         inimigo.rect.y += direcao_y * velocidade
@@ -109,6 +109,13 @@ while True:
 
     # Desenha o personagem na tela
     sprites_personagem.draw(tela)
+
+    mov_altura = altura % imagem_de_fundo.get_rect().width
+    tela.blit(imagem_de_fundo, (imagem_de_fundo.get_rect().width), 0)
+    if mov_altura < 960:
+        tela.blit(imagem_de_fundo, (mov_altura, 0))
+
+    altura-= 1/5
 
     # Atualiza a tela
     pygame.display.flip()
