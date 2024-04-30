@@ -41,7 +41,7 @@ sprites_personagem.add(personagem)
 
 #Variavel para o pulo do player
 pulando = False
-velocidade_do_pulo = -20
+velocidade_do_pulo = -10
 
 # Controle de FPS
 fps = pygame.time.Clock()
