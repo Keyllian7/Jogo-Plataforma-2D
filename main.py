@@ -50,7 +50,7 @@ inimigos.append(Inimigo(sprite_inimigo, 200, 200))
 
 #Variavel para o pulo do player
 pulando = False
-velocidade_do_pulo = -10
+velocidade_do_pulo = -20
 
 # Controle de FPS
 fps = pygame.time.Clock()
@@ -73,7 +73,7 @@ while True:
         direcao_x /= distancia
         direcao_y /= distancia
         
-        velocidade = 3
+        velocidade = 2
         
         inimigo.rect.x += direcao_x * velocidade
         inimigo.rect.y += direcao_y * velocidade
@@ -105,7 +105,7 @@ while True:
         # Verifica se o personagem atingiu o chão e reinicia o comando
         if personagem.rect.y >= 460:
             pulando = False
-            velocidade_do_pulo = -10
+            velocidade_do_pulo = -20
 
     # Desenha o personagem na tela
     sprites_personagem.draw(tela)
