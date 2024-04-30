@@ -15,15 +15,15 @@ class Personagem(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.sprites = []
-        self.sprites.append(pygame.image.load('A3 - Projetos/A3/Passos/Passo1.png'))
-        self.sprites.append(pygame.image.load('A3 - Projetos/A3/Passos/Passo2.png'))
-        self.sprites.append(pygame.image.load('A3 - Projetos/A3/Passos/Passo3.png'))
-        self.sprites.append(pygame.image.load('A3 - Projetos/A3/Passos/Passo4.png'))
-        self.sprites.append(pygame.image.load('A3 - Projetos/A3/Passos/Passo5.png'))
-        self.sprites.append(pygame.image.load('A3 - Projetos/A3/Passos/Passo6.png'))
-        self.sprites.append(pygame.image.load('A3 - Projetos/A3/Passos/Passo7.png'))
-        self.sprites.append(pygame.image.load('A3 - Projetos/A3/Passos/Passo8.png'))
-        self.sprites.append(pygame.image.load('A3 - Projetos/A3/Passos/Passo9.png'))
+        self.sprites.append(pygame.image.load('Jogo-Plataforma-2D\PassosDireita\PassoDireita1.png'))
+        self.sprites.append(pygame.image.load('Jogo-Plataforma-2D\PassosDireita\PassoDireita2.png'))
+        self.sprites.append(pygame.image.load('Jogo-Plataforma-2D\PassosDireita\PassoDireita3.png'))
+        self.sprites.append(pygame.image.load('Jogo-Plataforma-2D\PassosDireita\PassoDireita4.png'))
+        self.sprites.append(pygame.image.load('Jogo-Plataforma-2D\PassosDireita\PassoDireita5.png'))
+        self.sprites.append(pygame.image.load('Jogo-Plataforma-2D\PassosDireita\PassoDireita6.png'))
+        self.sprites.append(pygame.image.load('Jogo-Plataforma-2D\PassosDireita\PassoDireita7.png'))
+        self.sprites.append(pygame.image.load('Jogo-Plataforma-2D\PassosDireita\PassoDireita8.png'))
+        self.sprites.append(pygame.image.load('Jogo-Plataforma-2D\PassosDireita\PassoDireita9.png'))
         self.atual = 0
         self.image = self.sprites[self.atual]
         self.image = pygame.transform.scale(self.image, (int(38*1.5), int(48*1.5)))
@@ -86,7 +86,7 @@ todas_sprites = pygame.sprite.Group()
 personagem = Personagem()
 todas_sprites.add(personagem)
 
-imagem_fundo = pygame.image.load('A3 - Projetos/A3/Background.png').convert()
+imagem_fundo = pygame.image.load('Jogo-Plataforma-2D\Assets\Background.png').convert()
 imagem_fundo = pygame.transform.scale(imagem_fundo, (largura, altura))
 
 fps = pygame.time.Clock()
