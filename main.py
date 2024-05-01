@@ -5,7 +5,10 @@ from player import Personagem, Masculino, Feminino
 from inimigos import Inimigo, Vampiro, Lobisomem, Zumbi
 from plataformas import Plataforma
 
+
 pygame.init()
+
+G = 30.807
 
 # Diretórios dos arquivos
 diretorio_principal = os.path.dirname(__file__)
@@ -19,6 +22,7 @@ altura = 540
 # Criação da variável e argumentos para a execução da matriz.
 tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('UNP Survival')
+fps = pygame.time.Clock()
 
 # Variáveis que contém valores RGB.
 branco = (255, 255, 255)
@@ -46,19 +50,6 @@ inimigos = []
 tempo_para_respawn = 10  # Tempo em segundos para o próximo respawn
 ultimo_respawn = pygame.time.get_ticks()  # Último momento de respawn
 
-#Variavel para o pulo do player
-pulando = False
-velocidade_do_pulo = -15
-
-# Controle de FPS
-fps = pygame.time.Clock()
-
-velocidade_da_queda = 0
-
-#definindo a gravidade do jogo
-velocidade_vertical = 0
-aceleracao_gravidade = 0.1
-
 # Lista para armazenar as plataformas
 plataformas = []
 
@@ -69,6 +60,10 @@ plataforma2 = Plataforma(imagem_plataforma, 500, 300)
 plataforma3 = Plataforma(imagem_plataforma, 700, 200)
 plataformas.extend([plataforma1, plataforma2, plataforma3])
 
+acelecacao_x = 0
+aceleracao_y = 0
+
+
 # Loop Principal do jogo
 while True:
     fps.tick(60)
@@ -77,6 +72,19 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             exit()
+
+    T = fps.get_time() / 1000
+    F = G * T
+    aceleracao_y += F
+
+    personagem.rect.y += aceleracao_y
+    
+    if personagem.rect.y > 450:
+        personagem.rect.y = 450
+        aceleracao_y = 0
+        fps = pygame.time.Clock()
+
+
 
     # Desenha as plataformas na tela
     for plataforma in plataformas:
@@ -97,11 +105,9 @@ while True:
             vampiro.rect.x += direcao_x * velocidade
             vampiro.rect.y += direcao_y * velocidade
 
-            velocidade_vertical += aceleracao_gravidade
-            vampiro.rect.y += velocidade_vertical
 
-            if vampiro.rect.bottom > altura:
-                vampiro.rect.bottom = altura
+            if vampiro.rect.bottom > 540:
+                vampiro.rect.bottom = 540
 
         if vampiro.rect.x < personagem.rect.x:
             vampiro.direction = 'right'
@@ -131,42 +137,19 @@ while True:
         personagem.rect.x -= 5
         personagem.direction = 'left'
         personagem.update()
+    
+    if teclas_press[K_SPACE]:
+        aceleracao_y = -9
+        fps = pygame.time.Clock()
 
-    #Comando de pulo do personagem
-    if teclas_press[K_SPACE] and not pulando:
-        pulando = True
-
-    if not any(personagem.rect.colliderect(plataforma.rect) for plataforma in plataformas):
-        velocidade_da_queda += 1
-        personagem.rect.y += velocidade_da_queda
-
-        # Limite de velocidade da queda
-        if velocidade_da_queda > 10:
-            velocidade_da_queda = 10
-
-        # Verifica se o personagem atingiu o chão e reinicia a queda
-        if personagem.rect.y >= 460 or personagem.rect.colliderect(plataforma.rect):
-            velocidade_da_queda = 0
-            personagem.rect.y = 460
-
-
-    if pulando:
-        personagem.rect.y += velocidade_do_pulo
-        velocidade_do_pulo += 1
-
-        # Verifica se o personagem atingiu o chão e reinicia o comando
-        if personagem.rect.y >= 460:
-            pulando = False
-            velocidade_do_pulo = -15
 
     for plataforma in plataformas:
-        if personagem.rect.colliderect(plataforma.rect) and velocidade_do_pulo > 0:
+        if personagem.rect.colliderect(plataforma.rect):
             personagem.rect.bottom = plataforma.rect.top 
-            pulando = False
-            velocidade_do_pulo =-15
+        
 
     for vampiro in inimigos:
-        if vampiro.rect.colliderect(plataforma.rect) and velocidade_do_pulo > 0:
+        if vampiro.rect.colliderect(plataforma.rect):
             vampiro.rect.bottom = plataforma.rect.top
 
     # Desenha o personagem na tela
@@ -174,3 +157,5 @@ while True:
 
     # Atualiza a tela
     pygame.display.flip()
+    pygame.display.update()
+    fps.tick(60)
