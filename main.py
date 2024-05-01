@@ -18,7 +18,7 @@ altura = 540
 
 # Criação da variável e argumentos para a execução da matriz.
 tela = pygame.display.set_mode((largura, altura))
-pygame.display.set_caption('UNP')
+pygame.display.set_caption('UNP Survival')
 
 # Variáveis que contém valores RGB.
 branco = (255, 255, 255)
