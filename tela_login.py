@@ -27,7 +27,7 @@ unp_survival = pygame.image.load(os.path.join(diretorio_imagens,'Titulo UNP.png'
 unp_survival = pygame.transform.scale(unp_survival, (500, 125.49))
 
 Usuario_Login = pygame.image.load(os.path.join(diretorio_imagens,'Usuário UNP.png'))
-Usuario_Login = pygame.transform.scale(Usuario_Login, (150, 56.4))
+Usuario_Login = pygame.transform.scale(Usuario_Login, (150, 46.4))
 
 inicar_Jogo = pygame.image.load(os.path.join(diretorio_imagens,'Iniciar Jogo UNP.png'))
 inicar_Jogo = pygame.transform.scale(inicar_Jogo, (150, 56.4))
