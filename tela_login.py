@@ -23,13 +23,13 @@ altura = 540
 tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('Unp Survival - Login')
 
-unp_survival = pygame.image.load(os.path.join(diretorio_imagens,'UNP-Login.png')).convert_alpha()
+unp_survival = pygame.image.load(os.path.join(diretorio_imagens,'Titulo UNP.png')).convert_alpha()
 unp_survival = pygame.transform.scale(unp_survival, (500, 125.49))
 
-Usuario_Login = pygame.image.load(os.path.join(diretorio_imagens,'Usuário-Login.png'))
-Usuario_Login = pygame.transform.scale(Usuario_Login, (150, 56.4))
+Usuario_Login = pygame.image.load(os.path.join(diretorio_imagens,'Usuário UNP.png'))
+Usuario_Login = pygame.transform.scale(Usuario_Login, (150, 46.4))
 
-inicar_Jogo = pygame.image.load(os.path.join(diretorio_imagens,'IniciarJogo-Login.png'))
+inicar_Jogo = pygame.image.load(os.path.join(diretorio_imagens,'Iniciar Jogo UNP.png'))
 inicar_Jogo = pygame.transform.scale(inicar_Jogo, (150, 56.4))
 
 imagem_de_fundo = pygame.image.load(os.path.join(diretorio_imagens, 'Background.png'))
