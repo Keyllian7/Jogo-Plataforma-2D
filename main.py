@@ -1,9 +1,7 @@
-import pygame
-import math
-import os
+import pygame, os , math
 from pygame.locals import *
 from sys import exit
-from player import Personagem
+from player import Personagem, Masculino, Feminino
 from inimigos import Inimigo, Vampiro, Lobisomem, Zumbi
 
 pygame.init()
@@ -36,7 +34,7 @@ sprite_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsque
 
 
 # Criação do personagem
-personagem = Personagem(spritesheet_andar_direita, spritesheet_andar_esquerda)
+personagem = Masculino(spritesheet_andar_direita, spritesheet_andar_esquerda)
 sprites_personagem = pygame.sprite.Group()
 sprites_personagem.add(personagem)
 

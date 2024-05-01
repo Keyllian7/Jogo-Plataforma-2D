@@ -34,3 +34,12 @@ class Personagem(pygame.sprite.Sprite):
         elif self.direction == 'left':
             self.image = self.andar_esquerda[int(self.index_lista)]
         self.image = pygame.transform.scale(self.image, (int(64*1.5), int(47*1.5)))
+
+
+
+class Masculino(Personagem):
+    pass
+
+class Feminino(Personagem):
+    pass
+
