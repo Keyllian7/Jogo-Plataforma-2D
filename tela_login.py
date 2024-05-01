@@ -13,14 +13,17 @@ AZUL = (0, 0, 255)
 largura_tela = 960
 altura_tela = 540
 tela = pygame.display.set_mode((largura_tela, altura_tela))
-pygame.display.set_caption('Menu Inicial')
+pygame.display.set_caption('Unp Survival - Login')
+
+unp_survival = pygame.image.load('Jogo-Plataforma-2D/Assets Imagens/UNP.png')
+unp_survival = pygame.transform.scale(unp_survival, (320, 150))
 
 imgagem_fundo = pygame.image.load('Jogo-Plataforma-2D/Assets Imagens/Background.png')
 imgagem_fundo = pygame.transform.scale(imgagem_fundo, (largura_tela, altura_tela))
 
 # Defina a fonte para o texto
 fonte_usuario = pygame.font.Font(None, 25)
-fonte = pygame.font.Font(None, 36)
+fonte = pygame.font.Font(None, 30)
 
 
 # Variável para armazenar o nome do usuário
@@ -52,19 +55,20 @@ while rodando:
     tela.blit(imgagem_fundo, (mov_tela - imgagem_fundo.get_rect().width, 0))
     if mov_tela < 960:
         tela.blit(imgagem_fundo, (mov_tela,0))
-    altura_tela-= 1
+    altura_tela-= 1/2
 
+
+    tela.blit(unp_survival, (325,0))
     # Desenhar o campo de entrada de texto
-    pygame.draw.rect(tela, BRANCO, (380, 220, 200, 30), 2)
+    pygame.draw.rect(tela, BRANCO, (410, 220, 130, 20), 2)
     texto_nome = fonte_usuario.render(nome_usuario, True, BRANCO)
     tela.blit(texto_nome, (385, 220))
 
     # Desenhar o texto "Digite seu nome"
     texto_instrucao = fonte.render("Digite o nome de Usuario:", True, BRANCO)
-    tela.blit(texto_instrucao, (330, 180))
+    tela.blit(texto_instrucao, (345, 180))
 
     # Desenhar o botão de iniciar o jogo
-    pygame.draw.rect(tela, AZUL, (410, 350, 150, 30))
     texto_iniciar = fonte.render("Iniciar Jogo", True, BRANCO)
     tela.blit(texto_iniciar, (410, 350))
 
