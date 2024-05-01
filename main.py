@@ -34,9 +34,10 @@ imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 # Carregar sprites
 spritesheet_andar_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
 spritesheet_andar_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
-sprite_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosVampiroDireita.png')).convert_alpha()
-sprite_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosVampiroEsquerda.png')).convert_alpha()
-
+vampiro_direita = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroDireita.png')).convert_alpha()
+vampiro_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroEsquerda.png')).convert_alpha()
+lobo_direita = pygame.image.load(os.path.join(diretorio_imagens, 'LobisomenDireita.png')).convert_alpha()
+lobo_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'LobisomenEsquerda.png')).convert_alpha()
 
 # Criação do personagem
 personagem = Masculino(spritesheet_andar_direita, spritesheet_andar_esquerda)
@@ -46,7 +47,7 @@ sprites_personagem.add(personagem)
 ## Lista para armazenar os inimigos
 inimigos = []
 
-# Variável para controle do respawn de vampiros
+# Variável para controle do respawn de inimigos
 tempo_para_respawn = 10 
 ultimo_respawn = pygame.time.get_ticks()  
 
@@ -61,7 +62,8 @@ plataforma3 = Plataforma(imagem_plataforma, 700, 200)
 plataformas.extend([plataforma1, plataforma2, plataforma3])
 
 acelecacao_x = 0
-aceleracao_y = 0
+aceleracao_y_inimigos = 0
+aceleracao_y_player = 0
 
 pulou = False
 
@@ -76,15 +78,51 @@ while True:
 
     T = fps.get_time() / 1000
     F = G * T
-    aceleracao_y += F
+    aceleracao_y_inimigos += F
+    aceleracao_y_player += F
 
-    personagem.rect.y += aceleracao_y
+    personagem.rect.y += aceleracao_y_player
     
-
-
     # Desenha as plataformas na tela
     for plataforma in plataformas:
         tela.blit(plataforma.image, plataforma.rect)
+    
+    # Atualiza a posição dos inimigos em relação ao personagem
+    for lobo in inimigos:
+        if not personagem.rect.colliderect(lobo.rect): 
+            direcao_x = personagem.rect.x - lobo.rect.x
+            direcao_y = personagem.rect.y - lobo.rect.y
+            distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
+            
+            direcao_x /= distancia
+            direcao_y /= distancia
+            
+            velocidade = 4
+            
+            lobo.rect.x += direcao_x * velocidade
+
+    	    
+            lobo.rect.y += aceleracao_y_inimigos
+
+            if lobo.rect.bottom > 513:
+                lobo.rect.bottom = 513
+
+        if lobo.rect.x < personagem.rect.x:
+            lobo.direction = 'right'
+        else:
+            lobo.direction = 'left'
+        lobo.update()
+
+    # Desenha os inimigos na tela
+    for lobo in inimigos:
+        tela.blit(lobo.image, lobo.rect)
+
+    # Verifica se é hora de fazer o respawn de um novo lobo
+    tempo_atual = pygame.time.get_ticks()
+    if tempo_atual - ultimo_respawn > tempo_para_respawn * 1000:
+        novo_lobo = Lobisomem(lobo_direita, lobo_esquerda)
+        inimigos.append(novo_lobo)
+        ultimo_respawn = tempo_atual
     
     # Atualiza a posição dos inimigos em relação ao personagem
     for vampiro in inimigos:
@@ -118,7 +156,7 @@ while True:
     # Verifica se é hora de fazer o respawn de um novo vampiro
     tempo_atual = pygame.time.get_ticks()
     if tempo_atual - ultimo_respawn > tempo_para_respawn * 1000:
-        novo_vampiro = Vampiro(sprite_direita, sprite_esquerda)
+        novo_vampiro = Vampiro(vampiro_direita, vampiro_esquerda)
         inimigos.append(novo_vampiro)
         ultimo_respawn = tempo_atual
 
@@ -135,7 +173,7 @@ while True:
         personagem.update()
     
     if teclas_press[K_SPACE] and not pulou:
-        aceleracao_y = -9
+        aceleracao_y_player = - 10
         pulou = True
 
     if personagem.rect.y > 513:
@@ -157,4 +195,3 @@ while True:
     # Atualiza a tela
     pygame.display.flip()
     pygame.display.update()
-    fps.tick(60)

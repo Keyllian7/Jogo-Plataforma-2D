@@ -23,7 +23,6 @@ class Inimigo(pygame.sprite.Sprite):
 
         #Posição do personagem na tela
         self.rect = self.image.get_rect()
-        self.rect.topleft = 0, 460
 
     # Atualiza a imagem do personagem de acordo com a direção do movimento
     def update(self):
@@ -38,15 +37,15 @@ class Inimigo(pygame.sprite.Sprite):
 
 
 class Vampiro(Inimigo):
-    def __init__(self, sprite_direita_vampiro, sprite_esquerda_vampiro):
-        super().__init__(sprite_direita_vampiro, sprite_esquerda_vampiro)
+    def __init__(self, vampiro_direita, vampiro_esquerda):
+        super().__init__(vampiro_direita, vampiro_esquerda)
 
 class Zumbi(Inimigo):
     def __init__(self, sprite_direita_zumbi, sprite_esquerda_zumbi):
         super().__init__(sprite_direita_zumbi, sprite_esquerda_zumbi)
 
 class Lobisomem(Inimigo):
-    def __init__(self, sprite_direita_lobisomem, sprite_esquerda_lobisomem):
-        super().__init__(sprite_direita_lobisomem, sprite_esquerda_lobisomem)
+    def __init__(self, lobo_direita, lobo_esquerda):
+        super().__init__(lobo_direita, lobo_esquerda)
 
 
