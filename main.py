@@ -144,6 +144,16 @@ while True:
             pulando = False
             velocidade_do_pulo = -15
 
+    for plataforma in plataformas:
+        if personagem.rect.colliderect(plataforma.rect) and velocidade_do_pulo > 0:
+            velocidade_do_pulo = 0  # Para o pulo
+            personagem.rect.bottom = plataforma.rect.top  # Posiciona o personagem sobre a plataforma
+
+    for vampiro in inimigos:
+        if vampiro.rect.colliderect(plataforma.rect) and velocidade_do_pulo > 0:
+            velocidade_do_pulo = 0  
+            vampiro.rect.bottom = plataforma.rect.top  # Posiciona o vampiro sobre a plataforma
+
     # Desenha o personagem na tela
     sprites_personagem.draw(tela)
 
