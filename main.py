@@ -53,6 +53,7 @@ velocidade_do_pulo = -15
 # Controle de FPS
 fps = pygame.time.Clock()
 
+velocidade_da_queda = 0
 
 #definindo a gravidade do jogo
 velocidade_vertical = 0
@@ -134,6 +135,19 @@ while True:
     #Comando de pulo do personagem
     if teclas_press[K_SPACE] and not pulando:
         pulando = True
+
+    if not any(personagem.rect.colliderect(plataforma.rect) for plataforma in plataformas):
+        velocidade_da_queda += 1
+        personagem.rect.y += velocidade_da_queda
+
+        # Limite de velocidade da queda
+        if velocidade_da_queda > 10:
+            velocidade_da_queda = 10
+
+        # Verifica se o personagem atingiu o chão e reinicia a queda
+        if personagem.rect.y >= 460 or personagem.rect.colliderect(plataforma.rect):
+            velocidade_da_queda = 0
+            personagem.rect.y = 460
 
 
     if pulando:
