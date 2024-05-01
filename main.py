@@ -8,7 +8,7 @@ from plataformas import Plataforma
 
 pygame.init()
 
-G = 30.807
+G = 20.807
 
 # Diretórios dos arquivos
 diretorio_principal = os.path.dirname(__file__)
@@ -16,8 +16,8 @@ diretorio_imagens = os.path.join(diretorio_principal, 'Assets Imagens')
 diretorio_sons = os.path.join(diretorio_principal, 'Assets Sons')
 
 # Tamanho da matriz de pixels em que o jogo será reproduzido.
-largura = 960
-altura = 540
+largura = 1000
+altura = 600
 
 # Criação da variável e argumentos para a execução da matriz.
 tela = pygame.display.set_mode((largura, altura))
@@ -28,7 +28,7 @@ fps = pygame.time.Clock()
 branco = (255, 255, 255)
 
 #Imagem de fundo
-imagem_de_fundo = pygame.image.load(os.path.join(diretorio_imagens, 'Background.png'))
+imagem_de_fundo = pygame.image.load(os.path.join(diretorio_imagens, 'Background_Gameplay.png'))
 imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 
 # Carregar sprites
@@ -47,8 +47,8 @@ sprites_personagem.add(personagem)
 inimigos = []
 
 # Variável para controle do respawn de vampiros
-tempo_para_respawn = 10  # Tempo em segundos para o próximo respawn
-ultimo_respawn = pygame.time.get_ticks()  # Último momento de respawn
+tempo_para_respawn = 10 
+ultimo_respawn = pygame.time.get_ticks()  
 
 # Lista para armazenar as plataformas
 plataformas = []
@@ -63,6 +63,7 @@ plataformas.extend([plataforma1, plataforma2, plataforma3])
 acelecacao_x = 0
 aceleracao_y = 0
 
+ultimo_salto = pygame.time.get_ticks()
 
 # Loop Principal do jogo
 while True:
@@ -79,8 +80,8 @@ while True:
 
     personagem.rect.y += aceleracao_y
     
-    if personagem.rect.y > 450:
-        personagem.rect.y = 450
+    if personagem.rect.y > 513:
+        personagem.rect.y = 513
         aceleracao_y = 0
         fps = pygame.time.Clock()
 
@@ -106,8 +107,8 @@ while True:
             vampiro.rect.y += direcao_y * velocidade
 
 
-            if vampiro.rect.bottom > 540:
-                vampiro.rect.bottom = 540
+            if vampiro.rect.bottom > 513:
+                vampiro.rect.bottom = 513
 
         if vampiro.rect.x < personagem.rect.x:
             vampiro.direction = 'right'
@@ -147,10 +148,6 @@ while True:
         if personagem.rect.colliderect(plataforma.rect):
             personagem.rect.bottom = plataforma.rect.top 
         
-
-    for vampiro in inimigos:
-        if vampiro.rect.colliderect(plataforma.rect):
-            vampiro.rect.bottom = plataforma.rect.top
 
     # Desenha o personagem na tela
     sprites_personagem.draw(tela)
