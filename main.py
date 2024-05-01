@@ -55,6 +55,11 @@ velocidade_do_pulo = -20
 # Controle de FPS
 fps = pygame.time.Clock()
 
+
+#definindo a gravidade do jogo
+velocidade_vertical = 0
+aceleracao_gravidade = 0.1
+
 # Loop Principal do jogo
 while True:
     fps.tick(60)
@@ -66,17 +71,24 @@ while True:
 
     # Atualiza a posição dos inimigos em relação ao personagem
     for inimigo in inimigos:
-        direcao_x = personagem.rect.x - inimigo.rect.x
-        direcao_y = personagem.rect.y - inimigo.rect.y
-        distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
-        
-        direcao_x /= distancia
-        direcao_y /= distancia
-        
-        velocidade = 2
-        
-        inimigo.rect.x += direcao_x * velocidade
-        inimigo.rect.y += direcao_y * velocidade
+        if not personagem.rect.colliderect(inimigo.rect): 
+            direcao_x = personagem.rect.x - inimigo.rect.x
+            direcao_y = personagem.rect.y - inimigo.rect.y
+            distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
+            
+            direcao_x /= distancia
+            direcao_y /= distancia
+            
+            velocidade = 2
+            
+            inimigo.rect.x += direcao_x * velocidade
+            inimigo.rect.y += direcao_y * velocidade
+
+            velocidade_vertical += aceleracao_gravidade
+            inimigo.rect.y += velocidade_vertical
+
+            if inimigo.rect.bottom > altura:
+                inimigo.rect.bottom = altura
 
     # Desenha os inimigos na tela
     for inimigo in inimigos:
