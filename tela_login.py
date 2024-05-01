@@ -1,5 +1,9 @@
-import pygame
-import sys
+import pygame, os , math
+from pygame.locals import *
+from sys import exit
+from player import Personagem, Masculino, Feminino
+from inimigos import Inimigo, Vampiro, Lobisomem, Zumbi
+from plataformas import Plataforma
 
 # Inicialize o Pygame
 pygame.init()
@@ -9,18 +13,27 @@ BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
 AZUL = (0, 0, 255)
 
+diretorio_principal = os.path.dirname(__file__)
+diretorio_imagens = os.path.join(diretorio_principal, 'Assets Imagens')
+diretorio_sons = os.path.join(diretorio_principal, 'Assets Sons')
+
 # Defina a largura e a altura da tela
-largura_tela = 960
-altura_tela = 540
-tela = pygame.display.set_mode((largura_tela, altura_tela))
+largura = 960
+altura = 540
+tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('Unp Survival - Login')
 
-unp_survival = pygame.image.load('Jogo-Plataforma-2D/Assets Imagens/UNP.png')
-unp_survival = pygame.transform.scale(unp_survival, (320, 150))
+unp_survival = pygame.image.load(os.path.join(diretorio_imagens,'UNP-Login.png')).convert_alpha()
+unp_survival = pygame.transform.scale(unp_survival, (500, 125.49))
 
-imgagem_fundo = pygame.image.load('Jogo-Plataforma-2D/Assets Imagens/Background.png')
-imgagem_fundo = pygame.transform.scale(imgagem_fundo, (largura_tela, altura_tela))
+Usuario_Login = pygame.image.load(os.path.join(diretorio_imagens,'Usuário-Login.png'))
+Usuario_Login = pygame.transform.scale(Usuario_Login, (150, 56.4))
 
+inicar_Jogo = pygame.image.load(os.path.join(diretorio_imagens,'IniciarJogo-Login.png'))
+inicar_Jogo = pygame.transform.scale(inicar_Jogo, (150, 56.4))
+
+imagem_de_fundo = pygame.image.load(os.path.join(diretorio_imagens, 'Background.png'))
+imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 # Defina a fonte para o texto
 fonte_usuario = pygame.font.Font(None, 25)
 fonte = pygame.font.Font(None, 30)
@@ -50,31 +63,28 @@ while rodando:
                 nome_usuario += evento.unicode
 
     # Preencher a tela com a cor de fundo
-    tela.blit(imgagem_fundo, (0,0))
-    mov_tela = altura_tela % imgagem_fundo.get_rect().width
-    tela.blit(imgagem_fundo, (mov_tela - imgagem_fundo.get_rect().width, 0))
+    tela.blit(imagem_de_fundo, (0,0))
+    mov_tela = altura % imagem_de_fundo.get_rect().width
+    tela.blit(imagem_de_fundo, (mov_tela - imagem_de_fundo.get_rect().width, 0))
     if mov_tela < 960:
-        tela.blit(imgagem_fundo, (mov_tela,0))
-    altura_tela-= 1/2
+        tela.blit(imagem_de_fundo, (mov_tela,0))
+    altura-= 1/2
 
 
-    tela.blit(unp_survival, (325,0))
+    tela.blit(unp_survival, (230,0))
     # Desenhar o campo de entrada de texto
-    pygame.draw.rect(tela, BRANCO, (410, 220, 130, 20), 2)
     texto_nome = fonte_usuario.render(nome_usuario, True, BRANCO)
     tela.blit(texto_nome, (385, 220))
 
     # Desenhar o texto "Digite seu nome"
-    texto_instrucao = fonte.render("Digite o nome de Usuario:", True, BRANCO)
-    tela.blit(texto_instrucao, (345, 180))
+    tela.blit(Usuario_Login, (405, 175))
 
     # Desenhar o botão de iniciar o jogo
-    texto_iniciar = fonte.render("Iniciar Jogo", True, BRANCO)
-    tela.blit(texto_iniciar, (410, 350))
+    tela.blit(inicar_Jogo, (405, 372))
 
     # Atualizar a tela
     pygame.display.flip()
 
 # Finalizar o Pygame
 pygame.quit()
-sys.exit()
+
