@@ -63,7 +63,7 @@ plataformas.extend([plataforma1, plataforma2, plataforma3])
 acelecacao_x = 0
 aceleracao_y = 0
 
-ultimo_salto = pygame.time.get_ticks()
+pulou = False
 
 # Loop Principal do jogo
 while True:
@@ -80,11 +80,6 @@ while True:
 
     personagem.rect.y += aceleracao_y
     
-    if personagem.rect.y > 513:
-        personagem.rect.y = 513
-        aceleracao_y = 0
-        fps = pygame.time.Clock()
-
 
 
     # Desenha as plataformas na tela
@@ -139,14 +134,21 @@ while True:
         personagem.direction = 'left'
         personagem.update()
     
-    if teclas_press[K_SPACE]:
+    if teclas_press[K_SPACE] and not pulou:
         aceleracao_y = -9
+        pulou = True
+
+    if personagem.rect.y > 513:
+        personagem.rect.y = 513
+        aceleracao_y = 0
         fps = pygame.time.Clock()
+        pulou = False
 
 
     for plataforma in plataformas:
         if personagem.rect.colliderect(plataforma.rect):
-            personagem.rect.bottom = plataforma.rect.top 
+            personagem.rect.bottom = plataforma.rect.top
+            pulou = False
         
 
     # Desenha o personagem na tela
