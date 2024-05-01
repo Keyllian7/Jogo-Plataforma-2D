@@ -4,7 +4,7 @@ import os
 from pygame.locals import *
 from sys import exit
 from player import Personagem
-from inimigos import Inimigo
+from inimigos import Inimigo, Vampiro, Lobisomem, Zumbi
 
 pygame.init()
 
@@ -31,26 +31,25 @@ imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 # Carregar sprites
 spritesheet_andar_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
 spritesheet_andar_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
-sprite_inimigo = pygame.image.load(os.path.join(diretorio_imagens, 'Java.png')).convert_alpha()
+sprite_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
+sprite_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
 
-# Redimensionar a imagem do inimigo
-largura_inimigo = 50  
-altura_inimigo = 50   
-sprite_inimigo = pygame.transform.scale(sprite_inimigo, (largura_inimigo, altura_inimigo))
 
 # Criação do personagem
 personagem = Personagem(spritesheet_andar_direita, spritesheet_andar_esquerda)
 sprites_personagem = pygame.sprite.Group()
 sprites_personagem.add(personagem)
 
-# Criação do inimigo
+## Lista para armazenar os inimigos
 inimigos = []
-inimigos.append(Inimigo(sprite_inimigo, 100, 100))
-inimigos.append(Inimigo(sprite_inimigo, 200, 200))
+
+# Variável para controle do respawn de vampiros
+tempo_para_respawn = 10  # Tempo em segundos para o próximo respawn
+ultimo_respawn = pygame.time.get_ticks()  # Último momento de respawn
 
 #Variavel para o pulo do player
 pulando = False
-velocidade_do_pulo = -20
+velocidade_do_pulo = -15
 
 # Controle de FPS
 fps = pygame.time.Clock()
@@ -70,10 +69,10 @@ while True:
             exit()
 
     # Atualiza a posição dos inimigos em relação ao personagem
-    for inimigo in inimigos:
-        if not personagem.rect.colliderect(inimigo.rect): 
-            direcao_x = personagem.rect.x - inimigo.rect.x
-            direcao_y = personagem.rect.y - inimigo.rect.y
+    for vampiro in inimigos:
+        if not personagem.rect.colliderect(vampiro.rect): 
+            direcao_x = personagem.rect.x - vampiro.rect.x
+            direcao_y = personagem.rect.y - vampiro.rect.y
             distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
             
             direcao_x /= distancia
@@ -81,18 +80,31 @@ while True:
             
             velocidade = 2
             
-            inimigo.rect.x += direcao_x * velocidade
-            inimigo.rect.y += direcao_y * velocidade
+            vampiro.rect.x += direcao_x * velocidade
+            vampiro.rect.y += direcao_y * velocidade
 
             velocidade_vertical += aceleracao_gravidade
-            inimigo.rect.y += velocidade_vertical
+            vampiro.rect.y += velocidade_vertical
 
-            if inimigo.rect.bottom > altura:
-                inimigo.rect.bottom = altura
+            if vampiro.rect.bottom > altura:
+                vampiro.rect.bottom = altura
+
+        if vampiro.rect.x < personagem.rect.x:
+            vampiro.direction = 'right'
+        else:
+            vampiro.direction = 'left'
+        vampiro.update()
 
     # Desenha os inimigos na tela
-    for inimigo in inimigos:
-        tela.blit(inimigo.image, inimigo.rect)
+    for vampiro in inimigos:
+        tela.blit(vampiro.image, vampiro.rect)
+
+        # Verifica se é hora de fazer o respawn de um novo vampiro
+    tempo_atual = pygame.time.get_ticks()
+    if tempo_atual - ultimo_respawn > tempo_para_respawn * 1000:
+        novo_vampiro = Vampiro(spritesheet_andar_direita, spritesheet_andar_esquerda)
+        inimigos.append(novo_vampiro)
+        ultimo_respawn = tempo_atual
 
     # Verifica as teclas pressionadas para movimentar o personagem
     teclas_press = pygame.key.get_pressed()
@@ -117,7 +129,7 @@ while True:
         # Verifica se o personagem atingiu o chão e reinicia o comando
         if personagem.rect.y >= 460:
             pulando = False
-            velocidade_do_pulo = -20
+            velocidade_do_pulo = -15
 
     # Desenha o personagem na tela
     sprites_personagem.draw(tela)
