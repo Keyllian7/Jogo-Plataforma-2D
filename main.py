@@ -29,8 +29,8 @@ imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 # Carregar sprites
 spritesheet_andar_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
 spritesheet_andar_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
-sprite_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
-sprite_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
+sprite_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosVampiroDireita.png')).convert_alpha()
+sprite_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosVampiroEsquerda.png')).convert_alpha()
 
 
 # Criação do personagem
@@ -97,10 +97,10 @@ while True:
     for vampiro in inimigos:
         tela.blit(vampiro.image, vampiro.rect)
 
-        # Verifica se é hora de fazer o respawn de um novo vampiro
+    # Verifica se é hora de fazer o respawn de um novo vampiro
     tempo_atual = pygame.time.get_ticks()
     if tempo_atual - ultimo_respawn > tempo_para_respawn * 1000:
-        novo_vampiro = Vampiro(spritesheet_andar_direita, spritesheet_andar_esquerda)
+        novo_vampiro = Vampiro(sprite_direita, sprite_esquerda)
         inimigos.append(novo_vampiro)
         ultimo_respawn = tempo_atual
 
