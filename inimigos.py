@@ -37,14 +37,16 @@ class Inimigo(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (int(64*1.5), int(47*1.5)))
 
 
-# Classe para o Zumbi
-class Zumbi(Inimigo):
-    pass
-
-# Classe para o Lobisomem
-class Lobisomem(Inimigo):
-    pass
-
 class Vampiro(Inimigo):
-    pass
+    def __init__(self, sprite_direita_vampiro, sprite_esquerda_vampiro):
+        super().__init__(sprite_direita_vampiro, sprite_esquerda_vampiro)
+
+class Zumbi(Inimigo):
+    def __init__(self, sprite_direita_zumbi, sprite_esquerda_zumbi):
+        super().__init__(sprite_direita_zumbi, sprite_esquerda_zumbi)
+
+class Lobisomem(Inimigo):
+    def __init__(self, sprite_direita_lobisomem, sprite_esquerda_lobisomem):
+        super().__init__(sprite_direita_lobisomem, sprite_esquerda_lobisomem)
+
 
