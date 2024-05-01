@@ -3,6 +3,7 @@ from pygame.locals import *
 from sys import exit
 from player import Personagem, Masculino, Feminino
 from inimigos import Inimigo, Vampiro, Lobisomem, Zumbi
+from plataformas import Plataforma
 
 pygame.init()
 
@@ -57,6 +58,16 @@ fps = pygame.time.Clock()
 velocidade_vertical = 0
 aceleracao_gravidade = 0.1
 
+# Lista para armazenar as plataformas
+plataformas = []
+
+# Criação das plataformas
+imagem_plataforma = pygame.image.load(os.path.join(diretorio_imagens, 'java.png')).convert_alpha()
+plataforma1 = Plataforma(imagem_plataforma, 200, 400)
+plataforma2 = Plataforma(imagem_plataforma, 500, 300)
+plataforma3 = Plataforma(imagem_plataforma, 700, 200)
+plataformas.extend([plataforma1, plataforma2, plataforma3])
+
 # Loop Principal do jogo
 while True:
     fps.tick(60)
@@ -66,6 +77,10 @@ while True:
             pygame.quit()
             exit()
 
+    # Desenha as plataformas na tela
+    for plataforma in plataformas:
+        tela.blit(plataforma.image, plataforma.rect)
+    
     # Atualiza a posição dos inimigos em relação ao personagem
     for vampiro in inimigos:
         if not personagem.rect.colliderect(vampiro.rect): 
