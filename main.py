@@ -62,7 +62,7 @@ aceleracao_gravidade = 0.1
 plataformas = []
 
 # Criação das plataformas
-imagem_plataforma = pygame.image.load(os.path.join(diretorio_imagens, 'java.png')).convert_alpha()
+imagem_plataforma = pygame.image.load(os.path.join(diretorio_imagens, 'Plataforma.png')).convert_alpha()
 plataforma1 = Plataforma(imagem_plataforma, 200, 400)
 plataforma2 = Plataforma(imagem_plataforma, 500, 300)
 plataforma3 = Plataforma(imagem_plataforma, 700, 200)
