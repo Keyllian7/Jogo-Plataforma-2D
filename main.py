@@ -135,6 +135,7 @@ while True:
     if teclas_press[K_SPACE] and not pulando:
         pulando = True
 
+
     if pulando:
         personagem.rect.y += velocidade_do_pulo
         velocidade_do_pulo += 1
@@ -146,13 +147,13 @@ while True:
 
     for plataforma in plataformas:
         if personagem.rect.colliderect(plataforma.rect) and velocidade_do_pulo > 0:
-            velocidade_do_pulo = 0  # Para o pulo
-            personagem.rect.bottom = plataforma.rect.top  # Posiciona o personagem sobre a plataforma
+            personagem.rect.bottom = plataforma.rect.top 
+            pulando = False
+            velocidade_do_pulo =-15
 
     for vampiro in inimigos:
         if vampiro.rect.colliderect(plataforma.rect) and velocidade_do_pulo > 0:
-            velocidade_do_pulo = 0  
-            vampiro.rect.bottom = plataforma.rect.top  # Posiciona o vampiro sobre a plataforma
+            vampiro.rect.bottom = plataforma.rect.top
 
     # Desenha o personagem na tela
     sprites_personagem.draw(tela)
