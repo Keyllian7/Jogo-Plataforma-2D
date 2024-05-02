@@ -1,4 +1,4 @@
-import pygame, os , math
+import pygame, os , math, random
 from pygame.locals import *
 from sys import exit
 from player import Personagem, Masculino, Feminino
@@ -36,8 +36,8 @@ spritesheet_andar_direita = pygame.image.load(os.path.join(diretorio_imagens, 'P
 spritesheet_andar_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
 vampiro_direita = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroDireita.png')).convert_alpha()
 vampiro_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroEsquerda.png')).convert_alpha()
-lobo_direita = pygame.image.load(os.path.join(diretorio_imagens, 'LobisomenDireita.png')).convert_alpha()
-lobo_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'LobisomenEsquerda.png')).convert_alpha()
+lobo_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
+lobo_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
 
 # Criação do personagem
 personagem = Masculino(spritesheet_andar_direita, spritesheet_andar_esquerda)
@@ -49,7 +49,8 @@ inimigos = []
 
 # Variável para controle do respawn de inimigos
 tempo_para_respawn = 10 
-ultimo_respawn = pygame.time.get_ticks()  
+ultimo_respawn_lobo = pygame.time.get_ticks()  
+ultimo_respawn_vampiro = pygame.time.get_ticks()
 
 # Lista para armazenar as plataformas
 plataformas = []
@@ -97,15 +98,10 @@ while True:
             direcao_x /= distancia
             direcao_y /= distancia
             
-            velocidade = 4
+            velocidade = 2
             
             lobo.rect.x += direcao_x * velocidade
 
-    	    
-            lobo.rect.y += aceleracao_y_inimigos
-
-            if lobo.rect.bottom > 513:
-                lobo.rect.bottom = 513
 
         if lobo.rect.x < personagem.rect.x:
             lobo.direction = 'right'
@@ -113,52 +109,64 @@ while True:
             lobo.direction = 'left'
         lobo.update()
 
+        lobo.rect.y += aceleracao_y_inimigos
+
+        if lobo.rect.y > 513:
+            lobo.rect.y = 513
+            
+
+
+
+
     # Desenha os inimigos na tela
     for lobo in inimigos:
         tela.blit(lobo.image, lobo.rect)
 
     # Verifica se é hora de fazer o respawn de um novo lobo
-    tempo_atual = pygame.time.get_ticks()
-    if tempo_atual - ultimo_respawn > tempo_para_respawn * 1000:
-        novo_lobo = Lobisomem(lobo_direita, lobo_esquerda)
+    tempo_atual_lobo = pygame.time.get_ticks()
+    if tempo_atual_lobo - ultimo_respawn_lobo > tempo_para_respawn * 700:
+        novo_lobo = Lobisomem(lobo_direita, lobo_esquerda, (0, 0))  # Posição inicial temporária
+        novo_lobo.rect.x = random.choice([0, largura - novo_lobo.rect.width])
+        novo_lobo.rect.y = random.randint(altura // 2, altura - novo_lobo.rect.height)
         inimigos.append(novo_lobo)
-        ultimo_respawn = tempo_atual
+        ultimo_respawn_lobo = tempo_atual_lobo
     
+
     # Atualiza a posição dos inimigos em relação ao personagem
     for vampiro in inimigos:
         if not personagem.rect.colliderect(vampiro.rect): 
             direcao_x = personagem.rect.x - vampiro.rect.x
             direcao_y = personagem.rect.y - vampiro.rect.y
             distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
-            
+        
             direcao_x /= distancia
             direcao_y /= distancia
-            
-            velocidade = 2
-            
+        
+            velocidade = 1
+        
             vampiro.rect.x += direcao_x * velocidade
             vampiro.rect.y += direcao_y * velocidade
-
-
-            if vampiro.rect.bottom > 513:
-                vampiro.rect.bottom = 513
 
         if vampiro.rect.x < personagem.rect.x:
             vampiro.direction = 'right'
         else:
             vampiro.direction = 'left'
+        
         vampiro.update()
 
-    # Desenha os inimigos na tela
+
+    # Desenha os vampiros na tela
     for vampiro in inimigos:
         tela.blit(vampiro.image, vampiro.rect)
 
     # Verifica se é hora de fazer o respawn de um novo vampiro
-    tempo_atual = pygame.time.get_ticks()
-    if tempo_atual - ultimo_respawn > tempo_para_respawn * 1000:
-        novo_vampiro = Vampiro(vampiro_direita, vampiro_esquerda)
+    tempo_atual_vampiro = pygame.time.get_ticks()
+    if tempo_atual_vampiro - ultimo_respawn_vampiro > tempo_para_respawn * 1000:
+        novo_vampiro = Vampiro(vampiro_direita, vampiro_esquerda, (0, 0))  # Posição inicial temporária
+        novo_vampiro.rect.x = random.randint(0, largura - novo_vampiro.rect.width)
+        novo_vampiro.rect.y = 0
         inimigos.append(novo_vampiro)
-        ultimo_respawn = tempo_atual
+        ultimo_respawn_vampiro = tempo_atual_vampiro
 
     # Verifica as teclas pressionadas para movimentar o personagem
     teclas_press = pygame.key.get_pressed()
@@ -178,7 +186,7 @@ while True:
 
     if personagem.rect.y > 513:
         personagem.rect.y = 513
-        aceleracao_y = 0
+        aceleracao_y_player = 0
         fps = pygame.time.Clock()
         pulou = False
 
