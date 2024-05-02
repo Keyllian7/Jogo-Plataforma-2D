@@ -20,8 +20,8 @@ class Inimigo(pygame.sprite.Sprite):
         # Tamanho do personagem
         self.image = pygame.transform.scale(self.image, (int(64*1.5), int(47*1.5)))
 
-    # Atualiza a imagem do personagem de acordo com a direção do movimento
-    def update(self):
+    # Atualiza a animação do inimigo de acordo com a direção do movimento
+    def update_animation(self):
         self.index_lista += 0.25
         if self.index_lista >= len(self.andar_direita):
             self.index_lista -= len(self.andar_direita)
@@ -31,15 +31,37 @@ class Inimigo(pygame.sprite.Sprite):
             self.image = self.andar_esquerda[int(self.index_lista)]
         self.image = pygame.transform.scale(self.image, (int(64*1.5), int(47*1.5)))
 
+    # Atualiza a posição do inimigo
+    def update_position(self):
+        pass  
+
+    def update(self):
+        self.update_animation()
+        self.update_position()
+
 
 class Vampiro(Inimigo):
     def __init__(self, vampiro_direita, vampiro_esquerda, posicao_inicial):
         super().__init__(vampiro_direita, vampiro_esquerda, posicao_inicial)
 
+
+    def update_position(self):
+        pass
+
+
 class Zumbi(Inimigo):
     def __init__(self, sprite_direita_zumbi, sprite_esquerda_zumbi, posicao_inicial):
         super().__init__(sprite_direita_zumbi, sprite_esquerda_zumbi, posicao_inicial)
 
+
+    def update_position(self):
+        pass
+
+
 class Lobisomem(Inimigo):
     def __init__(self, lobo_direita, lobo_esquerda, posicao_inicial):
         super().__init__(lobo_direita, lobo_esquerda, posicao_inicial)
+
+    
+    def update_position(self):
+        self.rect.y += 1 

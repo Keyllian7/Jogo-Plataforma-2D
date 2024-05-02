@@ -1,14 +1,14 @@
 import pygame, os , math, random
 from pygame.locals import *
 from sys import exit
-from player import Personagem, Masculino, Feminino
-from inimigos import Inimigo, Vampiro, Lobisomem, Zumbi
+from player import Masculino, Feminino
+from inimigos import Vampiro, Lobisomem, Zumbi
 from plataformas import Plataforma
 
 
 pygame.init()
 
-G = 20.807
+G = 15.807
 
 # Diretórios dos arquivos
 diretorio_principal = os.path.dirname(__file__)
@@ -32,15 +32,15 @@ imagem_de_fundo = pygame.image.load(os.path.join(diretorio_imagens, 'Background_
 imagem_de_fundo = pygame.transform.scale(imagem_de_fundo, (largura, altura))
 
 # Carregar sprites
-spritesheet_andar_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
-spritesheet_andar_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
+personagem_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
+personagem_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
 vampiro_direita = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroDireita.png')).convert_alpha()
 vampiro_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroEsquerda.png')).convert_alpha()
 lobo_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
 lobo_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
 
 # Criação do personagem
-personagem = Masculino(spritesheet_andar_direita, spritesheet_andar_esquerda)
+personagem = Masculino(personagem_direita, personagem_esquerda)
 sprites_personagem = pygame.sprite.Group()
 sprites_personagem.add(personagem)
 
@@ -87,50 +87,18 @@ while True:
     # Desenha as plataformas na tela
     for plataforma in plataformas:
         tela.blit(plataforma.image, plataforma.rect)
-    
-    # Atualiza a posição dos inimigos em relação ao personagem
-    for lobo in inimigos:
-        if not personagem.rect.colliderect(lobo.rect): 
-            direcao_x = personagem.rect.x - lobo.rect.x
-            direcao_y = personagem.rect.y - lobo.rect.y
-            distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
-            
-            direcao_x /= distancia
-            direcao_y /= distancia
-            
-            velocidade = 2
-            
-            lobo.rect.x += direcao_x * velocidade
 
 
-        if lobo.rect.x < personagem.rect.x:
-            lobo.direction = 'right'
-        else:
-            lobo.direction = 'left'
-        lobo.update()
+    for inimigo in inimigos:
+        inimigo.update_animation()
+        inimigo.update_position()
 
-        lobo.rect.y += aceleracao_y_inimigos
+        if isinstance(inimigo, Lobisomem):
+            inimigo.rect.y += aceleracao_y_inimigos
 
-        if lobo.rect.y > 513:
-            lobo.rect.y = 513
-            
-
-
-
-
-    # Desenha os inimigos na tela
-    for lobo in inimigos:
-        tela.blit(lobo.image, lobo.rect)
-
-    # Verifica se é hora de fazer o respawn de um novo lobo
-    tempo_atual_lobo = pygame.time.get_ticks()
-    if tempo_atual_lobo - ultimo_respawn_lobo > tempo_para_respawn * 700:
-        novo_lobo = Lobisomem(lobo_direita, lobo_esquerda, (0, 0))  # Posição inicial temporária
-        novo_lobo.rect.x = random.choice([0, largura - novo_lobo.rect.width])
-        novo_lobo.rect.y = random.randint(altura // 2, altura - novo_lobo.rect.height)
-        inimigos.append(novo_lobo)
-        ultimo_respawn_lobo = tempo_atual_lobo
-    
+        # Verifica se o inimigo atingiu o chão
+        if inimigo.rect.y > 513:
+            inimigo.rect.y = 513
 
     # Atualiza a posição dos inimigos em relação ao personagem
     for vampiro in inimigos:
@@ -168,6 +136,42 @@ while True:
         inimigos.append(novo_vampiro)
         ultimo_respawn_vampiro = tempo_atual_vampiro
 
+
+    # Atualiza a posição dos inimigos em relação ao personagem
+    for lobo in inimigos:
+        if not personagem.rect.colliderect(lobo.rect): 
+            direcao_x = personagem.rect.x - lobo.rect.x
+            direcao_y = personagem.rect.y - lobo.rect.y
+            distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
+            
+            direcao_x /= distancia
+            direcao_y /= distancia
+            
+            velocidade = 2
+            
+            lobo.rect.x += direcao_x * velocidade
+
+        if lobo.rect.x < personagem.rect.x:
+            lobo.direction = 'right'
+        else:
+            lobo.direction = 'left'
+        lobo.update()
+
+            
+        # Desenha os inimigos na tela
+    for lobo in inimigos:
+        tela.blit(lobo.image, lobo.rect)
+
+    # Verifica se é hora de fazer o respawn de um novo lobo
+    tempo_atual_lobo = pygame.time.get_ticks()
+    if tempo_atual_lobo - ultimo_respawn_lobo > tempo_para_respawn * 700:
+        novo_lobo = Lobisomem(lobo_direita, lobo_esquerda, (0, 0))  # Posição inicial temporária
+        novo_lobo.rect.x = random.choice([0, largura - novo_lobo.rect.width])
+        novo_lobo.rect.y = random.randint(altura // 2, altura - novo_lobo.rect.height)
+        inimigos.append(novo_lobo)
+        ultimo_respawn_lobo = tempo_atual_lobo
+    
+
     # Verifica as teclas pressionadas para movimentar o personagem
     teclas_press = pygame.key.get_pressed()
     if teclas_press[K_d] and personagem.rect.right < largura + 30:
@@ -181,7 +185,7 @@ while True:
         personagem.update()
     
     if teclas_press[K_SPACE] and not pulou:
-        aceleracao_y_player = - 10
+        aceleracao_y_player = - 9
         pulou = True
 
     if personagem.rect.y > 513:

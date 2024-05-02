@@ -1,14 +1,14 @@
 import pygame
 
 class Personagem(pygame.sprite.Sprite):
-    def __init__(self, spritesheet_andar_direita, spritesheet_andar_esquerda):
+    def __init__(self, personagem_direita, personagem_esquerda):
         pygame.sprite.Sprite.__init__(self)
         self.andar_direita = []
         self.andar_esquerda = []
         for i in range(8):
-            img = spritesheet_andar_direita.subsurface((i * 64, 0), (64, 47))
+            img = personagem_direita.subsurface((i * 64, 0), (64, 47))
             self.andar_direita.append(img)
-            img = spritesheet_andar_esquerda.subsurface((i * 64, 0), (64, 47))
+            img = personagem_esquerda.subsurface((i * 64, 0), (64, 47))
             self.andar_esquerda.append(img)
 
         self.index_lista = 0
