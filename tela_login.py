@@ -5,17 +5,14 @@ from player import Personagem, Masculino, Feminino
 from inimigos import Inimigo, Vampiro, Lobisomem, Zumbi
 from plataformas import Plataforma
 import subprocess
-
 # Inicialize o Pygame
 pygame.init()
-
 # Defina as cores
 BRANCO = (255, 255, 255)
 #Diretorios de arquivos para o codigo
 diretorio_principal = os.path.dirname(__file__)
 diretorio_imagens = os.path.join(diretorio_principal, 'Assets Imagens')
 diretorio_sons = os.path.join(diretorio_principal, 'Assets Sons')
-
 # Defina a largura e a altura da tela
 largura = 960
 altura = 540
@@ -43,16 +40,13 @@ spritesheet_andar_esquerda = pygame.image.load(os.path.join(diretorio_imagens, '
 personagem = Masculino(spritesheet_andar_direita, spritesheet_andar_esquerda)
 sprites_personagem = pygame.sprite.Group()
 sprites_personagem.add(personagem)
-
 # Defina a fonte para o texto
 fonte_usuario = pygame.font.Font(None, 25)
 fonte = pygame.font.Font(None, 30)
 #Função do click
 clicked = False
-
 # Variável para armazenar o nome do usuário
 nome_usuario = ""
-
 # Loop principal do jogo
 rodando = True
 while rodando:
@@ -60,7 +54,6 @@ while rodando:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             rodando = False
-
         elif evento.type == pygame.KEYDOWN:
             # Verificar se uma tecla foi pressionada enquanto o campo de texto está ativo
             if evento.key == pygame.K_BACKSPACE:
@@ -73,12 +66,10 @@ while rodando:
             else:
                 # Adicionar caracteres digitados ao nome do usuário
                 nome_usuario += evento.unicode
-
         #Função do Iniciar jogo
         elif evento.type == pygame.MOUSEBUTTONDOWN:
             if iniciar_Jogo_rect.collidepoint(evento.pos):
                 clicked = True
-
     #Movimentar o fundo
     tela.blit(imagem_de_fundo, (0,0))
     mov_tela = altura % imagem_de_fundo.get_rect().width
@@ -99,9 +90,6 @@ while rodando:
     tela.blit(iniciar_Jogo, iniciar_Jogo_rect,)
     # Desenhar o personagem
     sprites_personagem.draw(tela, (500, 460))
-
-
-
     # Atualizar a tela
     pygame.display.flip()
     #Abrir o Jogo ao clicar no "Iniciar Jogo"
@@ -109,7 +97,6 @@ while rodando:
         subprocess.Popen(["python", "Jogo-Plataforma-2D\main.py"]) 
         pygame.quit()
         clicked = False
-
 # Finalizar o Pygame
 pygame.quit()
 
