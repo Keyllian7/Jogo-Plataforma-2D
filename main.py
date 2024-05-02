@@ -3,6 +3,7 @@ from pygame.locals import *
 from sys import exit
 from player import Masculino, Feminino
 from inimigos import Vampiro, Lobisomem, Zumbi
+from projetil import Flecha
 from plataformas import Plataforma
 
 
@@ -44,16 +45,20 @@ personagem = Masculino(personagem_direita, personagem_esquerda)
 sprites_personagem = pygame.sprite.Group()
 sprites_personagem.add(personagem)
 
-## Lista para armazenar os inimigos
-inimigos = []
 
 # Variável para controle do respawn de inimigos
 tempo_para_respawn = 10 
 ultimo_respawn_lobo = pygame.time.get_ticks()  
 ultimo_respawn_vampiro = pygame.time.get_ticks()
 
-# Lista para armazenar as plataformas
+# Listaz para armazenar objetos
 plataformas = []
+inimigos = []
+flechas = []
+
+# Carregar sprite da flecha
+flecha_imagem = pygame.image.load(os.path.join(diretorio_imagens, 'flecha.png')).convert_alpha()
+
 
 # Criação das plataformas
 imagem_plataforma = pygame.image.load(os.path.join(diretorio_imagens, 'Plataforma.png')).convert_alpha()
@@ -67,6 +72,23 @@ aceleracao_y_inimigos = 0
 aceleracao_y_player = 0
 
 pulou = False
+flecha = None
+
+# Variável para armazenar o número de vidas do personagem
+vidas_personagem = 10
+
+# Fonte para o contador de vidas
+fonte = pygame.font.Font(None, 36)
+
+# Função para renderizar o contador de vidas
+def renderizar_vidas():
+    texto_vidas = fonte.render(f'Vidas: {vidas_personagem}', True, (255, 255, 255))
+    tela.blit(texto_vidas, (10, 10))
+    
+
+ # Variável para controlar o tempo de invencibilidade do jogador após uma colisão com um inimigo
+tempo_invencibilidade = 0
+tempo_invencibilidade_maximo = 3000 
 
 # Loop Principal do jogo
 while True:
@@ -88,7 +110,10 @@ while True:
     for plataforma in plataformas:
         tela.blit(plataforma.image, plataforma.rect)
 
+    # Renderiza e exibe o contador de vidas
+    renderizar_vidas()
 
+    # Atualiza a posição e a animação dos inimigos
     for inimigo in inimigos:
         inimigo.update_animation()
         inimigo.update_position()
@@ -99,6 +124,22 @@ while True:
         # Verifica se o inimigo atingiu o chão
         if inimigo.rect.y > 513:
             inimigo.rect.y = 513
+
+        # Verifica colisões entre o personagem e os inimigos
+        if tempo_invencibilidade <= 0 and personagem.rect.colliderect(inimigo.rect):
+            # Reduz o número de vidas do personagem
+            vidas_personagem -= 1
+            # Define o tempo de invencibilidade do jogador
+            tempo_invencibilidade = tempo_invencibilidade_maximo
+
+            # Verifica se o personagem ainda tem vidas
+            if vidas_personagem == 0:
+                # Encerra o jogo se o personagem estiver sem vidas
+                pygame.quit()
+                exit()
+
+    # Reduz o tempo de invencibilidade do jogador
+    tempo_invencibilidade = max(0, tempo_invencibilidade - fps.get_time())
 
     # Atualiza a posição dos inimigos em relação ao personagem
     for vampiro in inimigos:
@@ -122,20 +163,14 @@ while True:
         
         vampiro.update()
 
-
-    # Desenha os vampiros na tela
-    for vampiro in inimigos:
-        tela.blit(vampiro.image, vampiro.rect)
-
     # Verifica se é hora de fazer o respawn de um novo vampiro
     tempo_atual_vampiro = pygame.time.get_ticks()
     if tempo_atual_vampiro - ultimo_respawn_vampiro > tempo_para_respawn * 1000:
-        novo_vampiro = Vampiro(vampiro_direita, vampiro_esquerda, (0, 0))  # Posição inicial temporária
+        novo_vampiro = Vampiro(vampiro_direita, vampiro_esquerda, (0, 0)) 
         novo_vampiro.rect.x = random.randint(0, largura - novo_vampiro.rect.width)
         novo_vampiro.rect.y = 0
         inimigos.append(novo_vampiro)
         ultimo_respawn_vampiro = tempo_atual_vampiro
-
 
     # Atualiza a posição dos inimigos em relação ao personagem
     for lobo in inimigos:
@@ -157,20 +192,14 @@ while True:
             lobo.direction = 'left'
         lobo.update()
 
-            
-        # Desenha os inimigos na tela
-    for lobo in inimigos:
-        tela.blit(lobo.image, lobo.rect)
-
     # Verifica se é hora de fazer o respawn de um novo lobo
     tempo_atual_lobo = pygame.time.get_ticks()
     if tempo_atual_lobo - ultimo_respawn_lobo > tempo_para_respawn * 700:
-        novo_lobo = Lobisomem(lobo_direita, lobo_esquerda, (0, 0))  # Posição inicial temporária
+        novo_lobo = Lobisomem(lobo_direita, lobo_esquerda, (0, 0)) 
         novo_lobo.rect.x = random.choice([0, largura - novo_lobo.rect.width])
         novo_lobo.rect.y = random.randint(altura // 2, altura - novo_lobo.rect.height)
         inimigos.append(novo_lobo)
         ultimo_respawn_lobo = tempo_atual_lobo
-    
 
     # Verifica as teclas pressionadas para movimentar o personagem
     teclas_press = pygame.key.get_pressed()
@@ -188,21 +217,45 @@ while True:
         aceleracao_y_player = - 9
         pulou = True
 
+    if teclas_press[K_m]:
+        nova_flecha = Flecha(flecha_imagem, personagem.rect.x, personagem.rect.y)
+        flechas.append(nova_flecha)
+
     if personagem.rect.y > 513:
         personagem.rect.y = 513
         aceleracao_y_player = 0
         fps = pygame.time.Clock()
         pulou = False
 
-
+    # Verifica colisões entre o personagem e as plataformas
     for plataforma in plataformas:
         if personagem.rect.colliderect(plataforma.rect):
             personagem.rect.bottom = plataforma.rect.top
             pulou = False
-        
 
+    # Atualiza a posição das flechas e verifica colisões com os inimigos
+    for flecha in flechas[:]: 
+        flecha.update()
+    for inimigo in inimigos:
+        if pygame.sprite.collide_rect(flecha, inimigo):
+            inimigos.remove(inimigo)
+            flechas.remove(flecha)
+            break
+
+    if flechas:
+        for flecha in flechas:
+            tela.blit(flecha.image, flecha.rect)
+    
     # Desenha o personagem na tela
     sprites_personagem.draw(tela)
+    
+    # Desenha os inimigos na tela
+    for lobo in inimigos:
+        tela.blit(lobo.image, lobo.rect)
+    
+    for vampiro in inimigos:
+        tela.blit(vampiro.image, vampiro.rect)
+
 
     # Atualiza a tela
     pygame.display.flip()
