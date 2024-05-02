@@ -234,13 +234,14 @@ while True:
             pulou = False
 
     # Atualiza a posição das flechas e verifica colisões com os inimigos
-    for flecha in flechas[:]: 
+    for flecha in flechas:
         flecha.update()
-    for inimigo in inimigos:
-        if pygame.sprite.collide_rect(flecha, inimigo):
-            inimigos.remove(inimigo)
-            flechas.remove(flecha)
-            break
+        for inimigo in inimigos:
+            if pygame.sprite.collide_rect(flecha, inimigo):
+                # Faça algo quando uma flecha atinge um inimigo, como remover a flecha e o inimigo da lista
+                flechas.remove(flecha)
+                inimigos.remove(inimigo)
+                break
 
     if flechas:
         for flecha in flechas:
