@@ -1,13 +1,13 @@
-import pygame
+import math
 
-class Flecha(pygame.sprite.Sprite):
-    def __init__(self, image, x, y):
-        super().__init__()
-        self.image = image
+class Flecha:
+    def __init__(self, imagem, x, y, angle):
+        self.image = imagem
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.velocidade = 10 
+        self.rect.center = (x, y)
+        self.speed = 10
+        self.angle = angle
 
     def update(self):
-        self.rect.x += self.velocidade
+        self.rect.x += self.speed * math.cos(self.angle)
+        self.rect.y += self.speed * math.sin(self.angle)

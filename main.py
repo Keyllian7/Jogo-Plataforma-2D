@@ -98,6 +98,9 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             exit()
+    
+    if event.type == pygame.MOUSEMOTION:
+        mouse_pos = pygame.mouse.get_pos()
 
     T = fps.get_time() / 1000
     F = G * T
@@ -166,13 +169,14 @@ while True:
     # Verifica se é hora de fazer o respawn de um novo vampiro
     tempo_atual_vampiro = pygame.time.get_ticks()
     if tempo_atual_vampiro - ultimo_respawn_vampiro > tempo_para_respawn * 1000:
-        novo_vampiro = Vampiro(vampiro_direita, vampiro_esquerda, (0, 0)) 
-        novo_vampiro.rect.x = random.randint(0, largura - novo_vampiro.rect.width)
-        novo_vampiro.rect.y = 0
-        inimigos.append(novo_vampiro)
-        ultimo_respawn_vampiro = tempo_atual_vampiro
+        if len(inimigos) < 2:
+            novo_vampiro = Vampiro(vampiro_direita, vampiro_esquerda, (0, 0)) 
+            novo_vampiro.rect.x = random.randint(0, largura - novo_vampiro.rect.width)
+            novo_vampiro.rect.y = 0
+            inimigos.append(novo_vampiro)
+            ultimo_respawn_vampiro = tempo_atual_vampiro
 
-    # Atualiza a posição dos inimigos em relação ao personagem
+    # Atualiza a posição do inimigo em relação ao personagem
     for lobo in inimigos:
         if not personagem.rect.colliderect(lobo.rect): 
             direcao_x = personagem.rect.x - lobo.rect.x
@@ -217,8 +221,9 @@ while True:
         aceleracao_y_player = - 9
         pulou = True
 
-    if teclas_press[K_m]:
-        nova_flecha = Flecha(flecha_imagem, personagem.rect.x, personagem.rect.y)
+    if pygame.mouse.get_pressed()[0]:
+        angle = math.atan2(mouse_pos[1] - personagem.rect.y, mouse_pos[0] - personagem.rect.x)
+        nova_flecha = Flecha(flecha_imagem, personagem.rect.x, personagem.rect.y, angle)
         flechas.append(nova_flecha)
 
     if personagem.rect.y > 513:
@@ -238,7 +243,6 @@ while True:
         flecha.update()
         for inimigo in inimigos:
             if pygame.sprite.collide_rect(flecha, inimigo):
-                # Faça algo quando uma flecha atinge um inimigo, como remover a flecha e o inimigo da lista
                 flechas.remove(flecha)
                 inimigos.remove(inimigo)
                 break
@@ -247,10 +251,9 @@ while True:
         for flecha in flechas:
             tela.blit(flecha.image, flecha.rect)
     
-    # Desenha o personagem na tela
+    # Desenha os sprites na tela
     sprites_personagem.draw(tela)
-    
-    # Desenha os inimigos na tela
+
     for lobo in inimigos:
         tela.blit(lobo.image, lobo.rect)
     
@@ -260,4 +263,3 @@ while True:
 
     # Atualiza a tela
     pygame.display.flip()
-    pygame.display.update()
