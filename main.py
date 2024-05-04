@@ -36,8 +36,8 @@ personagem_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDi
 personagem_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
 vampiro_direita = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroDireita.png')).convert_alpha()
 vampiro_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroEsquerda.png')).convert_alpha()
-lobo_direita = pygame.image.load(os.path.join(diretorio_imagens, 'PassosDireita.png')).convert_alpha()
-lobo_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'PassosEsquerda.png')).convert_alpha()
+lobo_direita = pygame.image.load(os.path.join(diretorio_imagens, 'Lobisomen_direita.png')).convert_alpha()
+lobo_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'Lobisomen_esquerda.png')).convert_alpha()
 
 # Criação do personagem
 personagem = Masculino(personagem_direita, personagem_esquerda)
