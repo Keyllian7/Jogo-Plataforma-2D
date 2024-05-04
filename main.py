@@ -9,8 +9,6 @@ from plataformas import Plataforma
 
 pygame.init()
 
-G = 15.807
-
 # Diretórios dos arquivos
 diretorio_principal = os.path.dirname(__file__)
 diretorio_imagens = os.path.join(diretorio_principal, 'Assets Imagens')
@@ -27,6 +25,7 @@ fps = pygame.time.Clock()
 
 # Variáveis que contém valores RGB.
 branco = (255, 255, 255)
+vermelho = (255, 0, 0)
 
 #Imagem de fundo
 imagem_de_fundo = pygame.image.load(os.path.join(diretorio_imagens, 'Background_Gameplay.png'))
@@ -74,21 +73,27 @@ aceleracao_y_player = 0
 pulou = False
 flecha = None
 
-# Variável para armazenar o número de vidas do personagem
 vidas_personagem = 10
+pontos_personagem = 0
 
-# Fonte para o contador de vidas
+# Fonte para o contador de vidas e pontos
 fonte = pygame.font.Font(None, 36)
 
 # Função para renderizar o contador de vidas
 def renderizar_vidas():
-    texto_vidas = fonte.render(f'Vidas: {vidas_personagem}', True, (255, 255, 255))
+    texto_vidas = fonte.render(f'Vidas: {vidas_personagem}', True, (vermelho))
     tela.blit(texto_vidas, (10, 10))
+
+def renderizar_pontos():
+    texto_pontos = fonte.render(f'Pontos: {pontos_personagem}', True, (branco))
+    tela.blit(texto_pontos, (875, 10))
     
 
  # Variável para controlar o tempo de invencibilidade do jogador após uma colisão com um inimigo
 tempo_invencibilidade = 0
 tempo_invencibilidade_maximo = 3000 
+
+G = 15.807
 
 # Loop Principal do jogo
 while True:
@@ -112,9 +117,6 @@ while True:
     # Desenha as plataformas na tela
     for plataforma in plataformas:
         tela.blit(plataforma.image, plataforma.rect)
-
-    # Renderiza e exibe o contador de vidas
-    renderizar_vidas()
 
     # Atualiza a posição e a animação dos inimigos
     for inimigo in inimigos:
@@ -245,6 +247,7 @@ while True:
             if pygame.sprite.collide_rect(flecha, inimigo):
                 flechas.remove(flecha)
                 inimigos.remove(inimigo)
+                pontos_personagem += 1
                 break
 
     if flechas:
@@ -260,6 +263,8 @@ while True:
     for vampiro in inimigos:
         tela.blit(vampiro.image, vampiro.rect)
 
+    renderizar_vidas()
+    renderizar_pontos()
 
-    # Atualiza a tela
+    # Função para atualizar a tela 
     pygame.display.flip()
