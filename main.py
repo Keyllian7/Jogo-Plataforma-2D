@@ -63,6 +63,10 @@ ultimo_respawn_lobo = pygame.time.get_ticks()
 ultimo_respawn_vampiro = pygame.time.get_ticks()
 ultimo_respawn_zumbi = pygame.time.get_ticks()
 
+velocidade_zumbi = 3  
+direcao_zumbi = 1 
+posicao_inicial_zumbi = [0, altura - 100]
+
 # Listaz para armazenar objetos
 plataformas = []
 inimigos = []
@@ -89,6 +93,12 @@ flecha = None
 vidas_personagem = 10
 pontos_personagem = 0
 
+ultimo_disparo_tempo = 0
+tempo_entre_disparos = 2000
+
+tempo_invencibilidade = 0
+tempo_invencibilidade_maximo = 2000 
+
 # Fonte para o contador de vidas e pontos
 fonte = pygame.font.Font(None, 36)
 
@@ -100,11 +110,6 @@ def renderizar_vidas():
 def renderizar_pontos():
     texto_pontos = fonte.render(f'Pontos: {pontos_personagem}', True, (branco))
     tela.blit(texto_pontos, (875, 10))
-    
-
-# Variável para controlar o tempo de invencibilidade do jogador após uma colisão com um inimigo
-tempo_invencibilidade = 0
-tempo_invencibilidade_maximo = 3000 
 
 G = 15.807
 
@@ -145,22 +150,30 @@ while True:
 
         # Verifica colisões entre o personagem e os inimigos
         if tempo_invencibilidade <= 0 and personagem.rect.colliderect(inimigo.rect):
-            # Reduz o número de vidas do personagem
             dano_ao_personagem.play()
             vidas_personagem -= 1
-            # Define o tempo de invencibilidade do jogador
             tempo_invencibilidade = tempo_invencibilidade_maximo
 
-            # Verifica se o personagem ainda tem vidas
             if vidas_personagem == 0:
-                # Encerra o jogo se o personagem estiver sem vidas
                 pygame.quit()
                 exit()
 
-    # Reduz o tempo de invencibilidade do jogador
     tempo_invencibilidade = max(0, tempo_invencibilidade - fps.get_time())
     
-    # Atualiza a posição dos inimigos em relação ao personagem
+    for inimigo in inimigos:
+        if isinstance(inimigo, Zumbi):
+            inimigo.rect.x += velocidade_zumbi * direcao_zumbi
+        
+        if inimigo.rect.left <= 0 or inimigo.rect.right >= largura:
+            direcao_zumbi *= -1
+
+# Atualiza a posição e a animação dos outros inimigos
+    for inimigo in inimigos:
+        if not isinstance(inimigo, Zumbi):
+            inimigo.update_animation()
+            inimigo.update_position()
+
+# Atualiza a posição dos inimigos em relação ao personagem
     for inimigo in inimigos:
         if not personagem.rect.colliderect(inimigo.rect): 
             direcao_x = personagem.rect.x - inimigo.rect.x
@@ -229,9 +242,13 @@ while True:
         efeito_de_pulo.play()
 
     if pygame.mouse.get_pressed()[0]:
-        angle = math.atan2(mouse_pos[1] - personagem.rect.y, mouse_pos[0] - personagem.rect.x)
-        nova_flecha = Flecha(flecha_imagem, personagem.rect.x, personagem.rect.y, angle)
-        flechas.append(nova_flecha)
+        
+        tempo_atual = pygame.time.get_ticks()
+        if tempo_atual - ultimo_disparo_tempo >= tempo_entre_disparos:
+            angle = math.atan2(mouse_pos[1] - personagem.rect.y, mouse_pos[0] - personagem.rect.x)
+            nova_flecha = Flecha(flecha_imagem, personagem.rect.x, personagem.rect.y, angle)
+            flechas.append(nova_flecha)
+            ultimo_disparo_tempo = tempo_atual
 
     if personagem.rect.y > 513:
         personagem.rect.y = 513
