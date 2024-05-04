@@ -41,6 +41,16 @@ lobo_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'Lobisomen_esq
 zumbi_direita = pygame.image.load(os.path.join(diretorio_imagens, 'Zumbi_direita.png')).convert_alpha()
 zumbi_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'Zumbi_esquerda.png')).convert_alpha()
 
+#Musicas e efeitos sonoroa
+
+dano_ao_personagem = pygame.mixer.Sound(os.path.join(diretorio_sons, 'dano-personagem.wav'))
+matou_o_inimigo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'matou-inimigo.wav'))
+musica_de_fundo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'musica de fundo.mp3'))
+efeito_de_pulo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'pulo.wav'))
+
+musica_de_fundo.play()
+musica_de_fundo.set_volume(0.10)
+
 # Criação do personagem
 personagem = Masculino(personagem_direita, personagem_esquerda)
 sprites_personagem = pygame.sprite.Group()
@@ -92,7 +102,7 @@ def renderizar_pontos():
     tela.blit(texto_pontos, (875, 10))
     
 
- # Variável para controlar o tempo de invencibilidade do jogador após uma colisão com um inimigo
+# Variável para controlar o tempo de invencibilidade do jogador após uma colisão com um inimigo
 tempo_invencibilidade = 0
 tempo_invencibilidade_maximo = 3000 
 
@@ -136,6 +146,7 @@ while True:
         # Verifica colisões entre o personagem e os inimigos
         if tempo_invencibilidade <= 0 and personagem.rect.colliderect(inimigo.rect):
             # Reduz o número de vidas do personagem
+            dano_ao_personagem.play()
             vidas_personagem -= 1
             # Define o tempo de invencibilidade do jogador
             tempo_invencibilidade = tempo_invencibilidade_maximo
@@ -215,6 +226,7 @@ while True:
     if teclas_press[K_SPACE] and not pulou:
         aceleracao_y_player = - 9
         pulou = True
+        efeito_de_pulo.play()
 
     if pygame.mouse.get_pressed()[0]:
         angle = math.atan2(mouse_pos[1] - personagem.rect.y, mouse_pos[0] - personagem.rect.x)
@@ -241,6 +253,8 @@ while True:
                 flechas.remove(flecha)
                 inimigos.remove(inimigo)
                 pontos_personagem += 1
+                matou_o_inimigo.play()
+
                 break
 
     if flechas:
