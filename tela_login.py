@@ -11,7 +11,7 @@ import subprocess
 pygame.init()
 
 # Defina as cores
-BRANCO = (255, 255, 255)
+preto = (0, 0, 0)
 
 # Diretorios de arquivos para o codigo
 diretorio_principal = os.path.dirname(__file__)
@@ -23,6 +23,7 @@ altura = 540
 tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('Unp Survival - Login')
 
+
 # Titulo do jogo
 unp_survival = pygame.image.load(os.path.join(diretorio_imagens, 'Titulo UNP.png')).convert_alpha()
 unp_survival = pygame.transform.scale(unp_survival, (500, 125))
@@ -30,6 +31,10 @@ unp_survival = pygame.transform.scale(unp_survival, (500, 125))
 # Imagem do Nome "Usuario"
 Usuario_Login = pygame.image.load(os.path.join(diretorio_imagens, 'Usuário UNP.png'))
 Usuario_Login = pygame.transform.scale(Usuario_Login, (150, 46))
+
+# Caixa do nome do Usuario:
+
+caixa_login = pygame.image.load(os.path.join(diretorio_imagens, 'Caixa.png')).convert_alpha()
 
 # Imagem do botão "Iniciar Jogo"
 iniciar_Jogo = pygame.image.load(os.path.join(diretorio_imagens, 'Iniciar Jogo UNP.png'))
@@ -104,7 +109,8 @@ while rodando:
     tela.blit(unp_survival, (230, 0))
 
     # Desenhar o campo de entrada de texto
-    texto_nome = fonte_usuario.render(nome_usuario, True, BRANCO)
+    texto_nome = fonte_usuario.render(nome_usuario, True, preto)
+    tela.blit(caixa_login, (0, -25))
     tela.blit(texto_nome, (405, 220))
 
     # Desenhar o texto "Digite seu nome"
