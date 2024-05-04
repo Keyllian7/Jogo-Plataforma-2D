@@ -80,8 +80,8 @@ flecha_imagem = pygame.image.load(os.path.join(diretorio_imagens, 'flecha.png'))
 
 # Criação das plataformas
 imagem_plataforma = pygame.image.load(os.path.join(diretorio_imagens, 'Plataforma.png')).convert_alpha()
-plataforma1 = Plataforma(imagem_plataforma, 200, 400)
-plataforma2 = Plataforma(imagem_plataforma, 500, 300)
+plataforma1 = Plataforma(imagem_plataforma, -20, 365)
+plataforma2 = Plataforma(imagem_plataforma, 200, 415)
 plataforma3 = Plataforma(imagem_plataforma, 700, 200)
 plataformas.extend([plataforma1, plataforma2, plataforma3])
 
@@ -246,8 +246,8 @@ while True:
         efeito_de_pulo.play()
 
     if pygame.mouse.get_pressed()[0]:
-        
         tempo_atual = pygame.time.get_ticks()
+        
         if tempo_atual - ultimo_disparo_tempo >= tempo_entre_disparos:
             angle = math.atan2(mouse_pos[1] - personagem.rect.y, mouse_pos[0] - personagem.rect.x)
             nova_flecha = Flecha(flecha_imagem, personagem.rect.x, personagem.rect.y, angle)
