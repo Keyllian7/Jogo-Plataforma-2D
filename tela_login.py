@@ -1,14 +1,22 @@
-import pygame, os , math, random
+import pygame, os, time
 from pygame.locals import *
-from sys import exit
 from player import Masculino, Feminino
-from inimigos import Vampiro, Lobisomem, Zumbi
-from projetil import Flecha
-from plataformas import Plataforma
 import subprocess
 
 # Inicialize o Pygame
 pygame.init()
+
+diretorio_principal = os.path.dirname(__file__)
+diretorio_sons = os.path.join(diretorio_principal, 'Assets Sons')
+
+musica_de_fundo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'musica de fundo.mp3'))
+
+iniciar_jogo_efeito = pygame.mixer.Sound(os.path.join(diretorio_sons, 'iniciar-jogo.wav'))
+
+
+musica_de_fundo.play()
+musica_de_fundo.set_volume(0.10)
+
 
 # Defina as cores
 preto = (0, 0, 0)
@@ -128,6 +136,8 @@ while rodando:
 
     # Abrir o Jogo ao clicar no "Iniciar Jogo"
     if clicked:
+        iniciar_jogo_efeito.play()
+        time.sleep(1)
         subprocess.Popen(["python", "Jogo-Plataforma-2D\main.py"])
         pygame.quit()
         clicked = False

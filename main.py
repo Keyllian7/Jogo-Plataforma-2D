@@ -1,4 +1,4 @@
-import pygame, os , math, random
+import pygame, os , math, random, time
 from pygame.locals import *
 from sys import exit
 from player import Masculino
@@ -47,6 +47,8 @@ dano_ao_personagem = pygame.mixer.Sound(os.path.join(diretorio_sons, 'dano-perso
 matou_o_inimigo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'matou-inimigo.wav'))
 musica_de_fundo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'musica de fundo.mp3'))
 efeito_de_pulo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'pulo.wav'))
+morte_personagem = pygame.mixer.Sound(os.path.join(diretorio_sons, 'morte_personagem.wav'))
+efeito_fechas = pygame.mixer.Sound(os.path.join(diretorio_sons, 'flecha-efeito.wav'))
 
 musica_de_fundo.play()
 musica_de_fundo.set_volume(0.10)
@@ -155,6 +157,8 @@ while True:
             tempo_invencibilidade = tempo_invencibilidade_maximo
 
             if vidas_personagem == 0:
+                morte_personagem.play()
+                time.sleep(1)
                 pygame.quit()
                 exit()
 
@@ -248,6 +252,7 @@ while True:
             angle = math.atan2(mouse_pos[1] - personagem.rect.y, mouse_pos[0] - personagem.rect.x)
             nova_flecha = Flecha(flecha_imagem, personagem.rect.x, personagem.rect.y, angle)
             flechas.append(nova_flecha)
+            efeito_fechas.play()
             ultimo_disparo_tempo = tempo_atual
 
     if personagem.rect.y > 513:
