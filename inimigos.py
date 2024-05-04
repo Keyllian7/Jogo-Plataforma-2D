@@ -44,6 +44,8 @@ class Vampiro(Inimigo):
     def __init__(self, vampiro_direita, vampiro_esquerda, posicao_inicial):
         super().__init__(vampiro_direita, vampiro_esquerda, posicao_inicial)
 
+        self.speed = 3
+
 
     def update_position(self):
         pass
@@ -53,14 +55,18 @@ class Zumbi(Inimigo):
     def __init__(self, sprite_direita_zumbi, sprite_esquerda_zumbi, posicao_inicial):
         super().__init__(sprite_direita_zumbi, sprite_esquerda_zumbi, posicao_inicial)
 
+        self.speed = 1
+
 
     def update_position(self):
-        pass
+        self.rect.y += 1
 
 
 class Lobisomem(Inimigo):
     def __init__(self, lobo_direita, lobo_esquerda, posicao_inicial):
         super().__init__(lobo_direita, lobo_esquerda, posicao_inicial)
+
+        self.speed = 5
 
     
     def update_position(self):

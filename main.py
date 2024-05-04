@@ -38,6 +38,8 @@ vampiro_direita = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroDire
 vampiro_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'VampiroEsquerda.png')).convert_alpha()
 lobo_direita = pygame.image.load(os.path.join(diretorio_imagens, 'Lobisomen_direita.png')).convert_alpha()
 lobo_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'Lobisomen_esquerda.png')).convert_alpha()
+zumbi_direita = pygame.image.load(os.path.join(diretorio_imagens, 'Zumbi_direita.png')).convert_alpha()
+zumbi_esquerda = pygame.image.load(os.path.join(diretorio_imagens, 'Zumbi_esquerda.png')).convert_alpha()
 
 # Criação do personagem
 personagem = Masculino(personagem_direita, personagem_esquerda)
@@ -49,6 +51,7 @@ sprites_personagem.add(personagem)
 tempo_para_respawn = 10 
 ultimo_respawn_lobo = pygame.time.get_ticks()  
 ultimo_respawn_vampiro = pygame.time.get_ticks()
+ultimo_respawn_zumbi = pygame.time.get_ticks()
 
 # Listaz para armazenar objetos
 plataformas = []
@@ -145,58 +148,48 @@ while True:
 
     # Reduz o tempo de invencibilidade do jogador
     tempo_invencibilidade = max(0, tempo_invencibilidade - fps.get_time())
-
+    
     # Atualiza a posição dos inimigos em relação ao personagem
-    for vampiro in inimigos:
-        if not personagem.rect.colliderect(vampiro.rect): 
-            direcao_x = personagem.rect.x - vampiro.rect.x
-            direcao_y = personagem.rect.y - vampiro.rect.y
+    for inimigo in inimigos:
+        if not personagem.rect.colliderect(inimigo.rect): 
+            direcao_x = personagem.rect.x - inimigo.rect.x
+            direcao_y = personagem.rect.y - inimigo.rect.y
             distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
         
             direcao_x /= distancia
             direcao_y /= distancia
         
-            velocidade = 1
+            velocidade = inimigo.speed
         
-            vampiro.rect.x += direcao_x * velocidade
-            vampiro.rect.y += direcao_y * velocidade
+            inimigo.rect.x += direcao_x * velocidade
+            inimigo.rect.y += direcao_y * velocidade
 
-        if vampiro.rect.x < personagem.rect.x:
-            vampiro.direction = 'right'
+        if inimigo.rect.x < personagem.rect.x:
+            inimigo.direction = 'right'
         else:
-            vampiro.direction = 'left'
+            inimigo.direction = 'left'
         
-        vampiro.update()
+        inimigo.update()
+
+
+    # Verifica se é hora de fazer o respawn de um novo zumbi
+    tempo_atual_zumbi = pygame.time.get_ticks()
+    if tempo_atual_zumbi - ultimo_respawn_zumbi > tempo_para_respawn * 500:
+            novo_zumbi = Zumbi(zumbi_direita, zumbi_esquerda, (0, 0)) 
+            novo_zumbi.rect.x = random.choice([0, largura - novo_zumbi.rect.width])
+            novo_zumbi.rect.y = random.randint(altura // 2, altura - novo_zumbi.rect.height)
+            inimigos.append(novo_zumbi)
+            ultimo_respawn_zumbi = tempo_atual_zumbi
+    
 
     # Verifica se é hora de fazer o respawn de um novo vampiro
     tempo_atual_vampiro = pygame.time.get_ticks()
     if tempo_atual_vampiro - ultimo_respawn_vampiro > tempo_para_respawn * 1000:
-        if len(inimigos) < 2:
             novo_vampiro = Vampiro(vampiro_direita, vampiro_esquerda, (0, 0)) 
             novo_vampiro.rect.x = random.randint(0, largura - novo_vampiro.rect.width)
             novo_vampiro.rect.y = 0
             inimigos.append(novo_vampiro)
             ultimo_respawn_vampiro = tempo_atual_vampiro
-
-    # Atualiza a posição do inimigo em relação ao personagem
-    for lobo in inimigos:
-        if not personagem.rect.colliderect(lobo.rect): 
-            direcao_x = personagem.rect.x - lobo.rect.x
-            direcao_y = personagem.rect.y - lobo.rect.y
-            distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
-            
-            direcao_x /= distancia
-            direcao_y /= distancia
-            
-            velocidade = 2
-            
-            lobo.rect.x += direcao_x * velocidade
-
-        if lobo.rect.x < personagem.rect.x:
-            lobo.direction = 'right'
-        else:
-            lobo.direction = 'left'
-        lobo.update()
 
     # Verifica se é hora de fazer o respawn de um novo lobo
     tempo_atual_lobo = pygame.time.get_ticks()
