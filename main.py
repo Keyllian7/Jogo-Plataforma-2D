@@ -1,7 +1,7 @@
 import pygame, os , math, random
 from pygame.locals import *
 from sys import exit
-from player import Masculino, Feminino
+from player import Masculino
 from inimigos import Vampiro, Lobisomem, Zumbi
 from projetil import Flecha
 from plataformas import Plataforma
