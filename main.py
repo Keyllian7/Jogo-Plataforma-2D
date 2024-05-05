@@ -1,4 +1,4 @@
-import pygame, os , math, random, time
+import pygame, os, math, random, time
 from pygame.locals import *
 from sys import exit
 from player import Masculino
@@ -48,7 +48,7 @@ matou_o_inimigo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'matou-inimigo
 musica_de_fundo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'musica de fundo.mp3'))
 efeito_de_pulo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'pulo.wav'))
 morte_personagem = pygame.mixer.Sound(os.path.join(diretorio_sons, 'morte_personagem.wav'))
-efeito_fechas = pygame.mixer.Sound(os.path.join(diretorio_sons, 'flecha-efeito.wav'))
+efeito_flechas = pygame.mixer.Sound(os.path.join(diretorio_sons, 'flecha-efeito.wav'))
 
 musica_de_fundo.play()
 musica_de_fundo.set_volume(0.10)
@@ -80,10 +80,14 @@ flecha_imagem = pygame.image.load(os.path.join(diretorio_imagens, 'flecha.png'))
 
 # Criação das plataformas
 imagem_plataforma = pygame.image.load(os.path.join(diretorio_imagens, 'Plataforma.png')).convert_alpha()
-plataforma1 = Plataforma(imagem_plataforma, -20, 365)
+imagem_plataforma_menor = pygame.image.load(os.path.join(diretorio_imagens, 'Plataforma-menor.png')).convert_alpha()
+plataforma1 = Plataforma(imagem_plataforma, -40, 365)
 plataforma2 = Plataforma(imagem_plataforma, 200, 415)
-plataforma3 = Plataforma(imagem_plataforma, 700, 200)
-plataformas.extend([plataforma1, plataforma2, plataforma3])
+plataforma3 = Plataforma(imagem_plataforma, 520, 365)
+plataforma4 = Plataforma(imagem_plataforma_menor, 300, 285)
+plataforma5 = Plataforma(imagem_plataforma_menor, 865, 285)
+plataforma6 = Plataforma(imagem_plataforma, 750, 415)
+plataformas.extend([plataforma1, plataforma2, plataforma3, plataforma4, plataforma5, plataforma6])
 
 acelecacao_x = 0
 aceleracao_y_inimigos = 0
@@ -151,7 +155,7 @@ while True:
             inimigo.rect.y = 513
 
         # Verifica colisões entre o personagem e os inimigos
-        if tempo_invencibilidade <= 0 and personagem.rect.colliderect(inimigo.rect):
+        if tempo_invencibilidade <= 0 and pygame.sprite.collide_mask(personagem, inimigo):
             dano_ao_personagem.play()
             vidas_personagem -= 1
             tempo_invencibilidade = tempo_invencibilidade_maximo
@@ -179,7 +183,7 @@ while True:
 
 # Atualiza a posição dos inimigos em relação ao personagem
     for inimigo in inimigos:
-        if not personagem.rect.colliderect(inimigo.rect): 
+        if not pygame.sprite.collide_mask(personagem, inimigo): 
             direcao_x = personagem.rect.x - inimigo.rect.x
             direcao_y = personagem.rect.y - inimigo.rect.y
             distancia = math.sqrt(direcao_x ** 2 + direcao_y ** 2)
@@ -252,7 +256,7 @@ while True:
             angle = math.atan2(mouse_pos[1] - personagem.rect.y, mouse_pos[0] - personagem.rect.x)
             nova_flecha = Flecha(flecha_imagem, personagem.rect.x, personagem.rect.y, angle)
             flechas.append(nova_flecha)
-            efeito_fechas.play()
+            efeito_flechas.play()
             ultimo_disparo_tempo = tempo_atual
 
     if personagem.rect.y > 513:
@@ -263,7 +267,7 @@ while True:
 
     # Verifica colisões entre o personagem e as plataformas
     for plataforma in plataformas:
-        if personagem.rect.colliderect(plataforma.rect):
+        if pygame.sprite.collide_mask(personagem, plataforma):
             personagem.rect.bottom = plataforma.rect.top
             pulou = False
 
@@ -271,12 +275,11 @@ while True:
     for flecha in flechas:
         flecha.update()
         for inimigo in inimigos:
-            if pygame.sprite.collide_rect(flecha, inimigo):
+            if pygame.sprite.collide_mask(flecha, inimigo):
                 flechas.remove(flecha)
                 inimigos.remove(inimigo)
                 pontos_personagem += 1
                 matou_o_inimigo.play()
-
                 break
 
     if flechas:
