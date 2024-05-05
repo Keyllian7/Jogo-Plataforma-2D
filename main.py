@@ -12,6 +12,7 @@ nome_usuario = sys.argv[1]
 
 conn = mysql.connector.connect(
     host="localhost",
+    port = 3306,
     user="root",
     password="2031",
     database="survival"
