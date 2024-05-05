@@ -1,11 +1,24 @@
-import pygame, os, math, random, time
+
+import pygame, os, math, random, time, mysql.connector, sys, subprocess
 from pygame.locals import *
 from sys import exit
 from player import Masculino
 from inimigos import Vampiro, Lobisomem, Zumbi
 from projetil import Flecha
 from plataformas import Plataforma
-import subprocess
+
+nome_usuario = sys.argv[1]
+
+
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="2031",
+    database="survival"
+                )
+
+# Criar um cursor para executar comandos SQL
+cursor = conn.cursor()
 
 
 pygame.init()
@@ -294,5 +307,19 @@ while True:
         morte_personagem.play() 
         time.sleep(1)
         # Encerra o jogo
-        subprocess.Popen(["python", "Jogo-Plataforma-2D/tela_final.py", str(pontos_personagem)])
+        sql = "INSERT INTO resultado (nome_jogador, pontos_jogador) VALUES (%s,%s)"
+
+                # Dados a serem inseridos (nome do jogador)
+        dados = (nome_usuario,pontos_personagem)
+
+                # Executar o comando SQL
+        cursor.execute(sql, dados)
+
+                # Commit da transação para salvar as alterações no banco de dados
+        conn.commit()
+
+                # Fechar o cursor e a conexão
+        cursor.close()
+        conn.close()
+        subprocess.Popen(["python", "Jogo-Plataforma-2D/tela_final.py",])
         pygame.quit()

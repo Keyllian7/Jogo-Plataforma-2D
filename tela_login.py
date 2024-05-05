@@ -13,6 +13,8 @@ musica_de_fundo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'musica de fun
 
 iniciar_jogo_efeito = pygame.mixer.Sound(os.path.join(diretorio_sons, 'iniciar-jogo.wav'))
 
+caminho_main = os.path.join(os.path.dirname(__file__), "main.py")
+
 
 musica_de_fundo.play()
 musica_de_fundo.set_volume(0.10)
@@ -96,7 +98,9 @@ while rodando:
                 # Se pressionar Enter, armazene o nome do usuário onde desejar
                 nome_do_jogador = nome_usuario
                 print("Nome do jogador:", nome_do_jogador)
-                # Aqui você pode fazer o que quiser com o nome do jogador, como passá-lo para outra parte do código ou usá-lo para iniciar o jogo
+                time.sleep(1)
+                pygame.quit()
+                subprocess.Popen(["python", caminho_main, nome_usuario])
             else:
                 # Adicionar caracteres digitados ao nome do usuário
                 nome_usuario += evento.unicode
@@ -138,8 +142,8 @@ while rodando:
     if clicked:
         iniciar_jogo_efeito.play()
         time.sleep(1)
-        subprocess.Popen(["python", "Jogo-Plataforma-2D\main.py"])
         pygame.quit()
+        subprocess.Popen(["python", "Jogo-Plataforma-2D\main.py"])
         clicked = False
 
 # Finalizar o Pygame
