@@ -14,10 +14,10 @@ else:
 
 
 conn = mysql.connector.connect(
-    host="localhost",
+    host="192.168.0.14",
     port = 3306,
-    user="root",
-    password="2031",
+    user="sql",
+    password="7891011",
     database="survival"
                 )
 

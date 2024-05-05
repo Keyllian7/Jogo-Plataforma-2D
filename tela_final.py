@@ -4,10 +4,10 @@ from sys import exit, argv
 
 # Inicialização da conexão com o banco de dados
 conn = mysql.connector.connect(
-    host="localhost",
-    port=3306,
-    user="root",
-    password="2031",
+    host="192.168.0.14",
+    port = 3306,
+    user="sql",
+    password="7891011",
     database="survival"
 )
 
@@ -53,72 +53,36 @@ resultados = cursor.fetchall()
 cursor.close()
 
 # Função para renderizar o Nome do jogador
-def renderizar_nome_1(pontuacao_final):
+def renderizar_nome(pontuacao_final, pos_y):
     texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
-    tela.blit(texto_pontuacao_final, (395, 210))
-def renderizar_nome_2(pontuacao_final):
-    texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
-    tela.blit(texto_pontuacao_final, (395, 272))
-def renderizar_nome_3(pontuacao_final):
-    texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
-    tela.blit(texto_pontuacao_final, (395, 335))
+    tela.blit(texto_pontuacao_final, (395, pos_y))
 
-#Função para renderizar a pontuação final do jogador
-def renderizar_pontuacao_1(pontuacao_final):
+# Função para renderizar a pontuação final do jogador
+def renderizar_pontuacao(pontuacao_final, pos_y):
     texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
-    tela.blit(texto_pontuacao_final, (585, 210))
-def renderizar_pontuacao_2(pontuacao_final):
-    texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
-    tela.blit(texto_pontuacao_final, (585, 272))
-def renderizar_pontuacao_3(pontuacao_final):
-    texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
-    tela.blit(texto_pontuacao_final, (585, 335))
-
-# Verificar se há pelo menos três resultados
-if len(resultados) >= 3:
-    # Recuperar os nomes e pontos dos três primeiros jogadores
-    nome_jogador_1 = resultados[0][0]
-    pontos_jogador_1 = resultados[0][1]
-
-    nome_jogador_2 = resultados[1][0]
-    pontos_jogador_2 = resultados[1][1]
-
-    nome_jogador_3 = resultados[2][0]
-    pontos_jogador_3 = resultados[2][1]
-
-    # Exibir os nomes e pontos dos três primeiros jogadores
-    print(f"Nome do jogador 1: {nome_jogador_1}, Pontos: {pontos_jogador_1}")
-    print(f"Nome do jogador 2: {nome_jogador_2}, Pontos: {pontos_jogador_2}")
-    print(f"Nome do jogador 3: {nome_jogador_3}, Pontos: {pontos_jogador_3}")
-else:
-    print("Não há jogadores suficientes na tabela.")
+    tela.blit(texto_pontuacao_final, (585, pos_y))
 
 # Loop Principal do jogo
-while True:
+rodando = True
+while rodando:
     fps.tick(60)
     tela.blit(imagem_de_fundo, (0, 0))
 
     for event in pygame.event.get():
         if event.type == QUIT:
-            pygame.quit()
-            exit()
+            rodando = False
 
-    # Renderiza a pontuação final do jogador
-    pontuacao_final = f"{nome_jogador_1}"
-    renderizar_nome_1(pontuacao_final)
-    pontuacao_final = f"{nome_jogador_2}"
-    renderizar_nome_2(pontuacao_final)
-    pontuacao_final = f"{nome_jogador_3}"
-    renderizar_nome_3(pontuacao_final)
-    pontuacao_final = f"{pontos_jogador_1}"
-    renderizar_pontuacao_1(pontuacao_final)
-    pontuacao_final = f"{pontos_jogador_2}"
-    renderizar_pontuacao_2(pontuacao_final)
-    pontuacao_final = f"{pontos_jogador_3}"
-    renderizar_pontuacao_3(pontuacao_final)
-    
+    # Exibir os resultados
+    if resultados:
+        for i, resultado in enumerate(resultados):
+            nome_jogador = resultado[0]
+            pontos_jogador = resultado[1]
+            renderizar_nome(nome_jogador, 210 + i * 62)
+            renderizar_pontuacao(str(pontos_jogador), 210 + i * 62)
+    else:
+        print("Não há jogadores suficientes na tabela.")
 
     pygame.display.flip()
 
 # Fechar a conexão com o banco de dados
-    conn.close()
+conn.close()
