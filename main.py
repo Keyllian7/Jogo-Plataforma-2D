@@ -7,7 +7,10 @@ from inimigos import Vampiro, Lobisomem, Zumbi
 from projetil import Flecha
 from plataformas import Plataforma
 
-nome_usuario = sys.argv[1]
+if len(sys.argv) > 1:
+    nome_usuario = sys.argv[1]
+else:
+    nome_usuario = "Grilinho"
 
 
 conn = mysql.connector.connect(
@@ -107,7 +110,7 @@ pulou = False
 flecha = None
 
 #variaveis para controle de vidas e pontos do personagem
-vidas_personagem = 10
+vidas_personagem = 2
 pontos_personagem = 0
 
 #variaveis para controle do tempo de invencibilidade e tempo de disparos do personagem
@@ -318,9 +321,7 @@ while True:
 
                 # Commit da transação para salvar as alterações no banco de dados
         conn.commit()
-
-                # Fechar o cursor e a conexão
+        subprocess.Popen(["python", "Jogo-Plataforma-2D/tela_final.py",])
+        pygame.quit()        # Fechar o cursor e a conexão
         cursor.close()
         conn.close()
-        subprocess.Popen(["python", "Jogo-Plataforma-2D/tela_final.py",])
-        pygame.quit()
