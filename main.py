@@ -5,6 +5,7 @@ from player import Masculino
 from inimigos import Vampiro, Lobisomem, Zumbi
 from projetil import Flecha
 from plataformas import Plataforma
+import subprocess
 
 
 pygame.init()
@@ -151,12 +152,6 @@ while True:
             vidas_personagem -= 1
             tempo_invencibilidade = tempo_invencibilidade_maximo
 
-            if vidas_personagem == 0:
-                morte_personagem.play()
-                time.sleep(1)
-                pygame.quit()
-                exit()
-
     tempo_invencibilidade = max(0, tempo_invencibilidade - fps.get_time())
     
     #controla a posição do inimigo
@@ -294,3 +289,10 @@ while True:
 
     # Função para atualizar a tela a cada ciclo do loop.
     pygame.display.flip()
+
+    if vidas_personagem == 0:
+        morte_personagem.play() 
+        time.sleep(1)
+        # Encerra o jogo
+        subprocess.Popen(["python", "Jogo-Plataforma-2D/tela_final.py", str(pontos_personagem)])
+        pygame.quit()
