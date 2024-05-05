@@ -52,10 +52,27 @@ resultados = cursor.fetchall()
 # Fechar o cursor, mas manter a conexão aberta
 cursor.close()
 
-# Função para renderizar a pontuação final do jogador
-def renderizar_pontuacao_final(pontuacao_final):
+# Função para renderizar o Nome do jogador
+def renderizar_nome_1(pontuacao_final):
     texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
-    tela.blit(texto_pontuacao_final, (593, 210))
+    tela.blit(texto_pontuacao_final, (395, 210))
+def renderizar_nome_2(pontuacao_final):
+    texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
+    tela.blit(texto_pontuacao_final, (395, 272))
+def renderizar_nome_3(pontuacao_final):
+    texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
+    tela.blit(texto_pontuacao_final, (395, 335))
+
+#Função para renderizar a pontuação final do jogador
+def renderizar_pontuacao_1(pontuacao_final):
+    texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
+    tela.blit(texto_pontuacao_final, (585, 210))
+def renderizar_pontuacao_2(pontuacao_final):
+    texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
+    tela.blit(texto_pontuacao_final, (585, 272))
+def renderizar_pontuacao_3(pontuacao_final):
+    texto_pontuacao_final = fonte_fim_jogo.render(pontuacao_final, True, preto)
+    tela.blit(texto_pontuacao_final, (585, 335))
 
 # Verificar se há pelo menos três resultados
 if len(resultados) >= 3:
@@ -87,8 +104,19 @@ while True:
             exit()
 
     # Renderiza a pontuação final do jogador
+    pontuacao_final = f"{nome_jogador_1}"
+    renderizar_nome_1(pontuacao_final)
+    pontuacao_final = f"{nome_jogador_2}"
+    renderizar_nome_2(pontuacao_final)
+    pontuacao_final = f"{nome_jogador_3}"
+    renderizar_nome_3(pontuacao_final)
     pontuacao_final = f"{pontos_jogador_1}"
-    renderizar_pontuacao_final(pontuacao_final)
+    renderizar_pontuacao_1(pontuacao_final)
+    pontuacao_final = f"{pontos_jogador_2}"
+    renderizar_pontuacao_2(pontuacao_final)
+    pontuacao_final = f"{pontos_jogador_3}"
+    renderizar_pontuacao_3(pontuacao_final)
+    
 
     pygame.display.flip()
 
