@@ -59,7 +59,7 @@ class Zumbi(Inimigo):
 
 
     def update_position(self):
-        self.rect.y += 1
+        self.rect.y += 15
 
 
 class Lobisomem(Inimigo):
