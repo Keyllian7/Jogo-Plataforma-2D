@@ -1,7 +1,6 @@
-import pygame, os, time
+import pygame, os, time, subprocess, sys
 from pygame.locals import *
 from player import Masculino, Feminino
-import subprocess
 
 # Inicialize o Pygame
 pygame.init()
@@ -15,10 +14,11 @@ iniciar_jogo_efeito = pygame.mixer.Sound(os.path.join(diretorio_sons, 'iniciar-j
 
 caminho_main = os.path.join(os.path.dirname(__file__), "main.py")
 
+# Caminho do Python
+python_executable = sys.executable
 
 musica_de_fundo.play()
 musica_de_fundo.set_volume(0.10)
-
 
 # Defina as cores
 preto = (0, 0, 0)
@@ -33,7 +33,6 @@ altura = 540
 tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('Unp Survival - Login')
 
-
 # Titulo do jogo
 unp_survival = pygame.image.load(os.path.join(diretorio_imagens, 'Titulo UNP.png')).convert_alpha()
 unp_survival = pygame.transform.scale(unp_survival, (500, 125))
@@ -43,7 +42,6 @@ Usuario_Login = pygame.image.load(os.path.join(diretorio_imagens, 'Usuário UNP.
 Usuario_Login = pygame.transform.scale(Usuario_Login, (150, 46))
 
 # Caixa do nome do Usuario:
-
 caixa_login = pygame.image.load(os.path.join(diretorio_imagens, 'Caixa.png')).convert_alpha()
 
 # Imagem do botão "Iniciar Jogo"
@@ -100,7 +98,7 @@ while rodando:
                 print("Nome do jogador:", nome_do_jogador)
                 time.sleep(1)
                 pygame.quit()
-                subprocess.Popen(["python", caminho_main, nome_usuario])
+                subprocess.Popen([python_executable, caminho_main, nome_usuario])
             else:
                 # Adicionar caracteres digitados ao nome do usuário
                 nome_usuario += evento.unicode
@@ -131,7 +129,7 @@ while rodando:
     # Desenhar o botão de iniciar o jogo
     tela.blit(iniciar_Jogo, iniciar_Jogo_rect)
 
-    #Mostra persongaem na tela
+    # Mostra personagem na tela
     sprites_personagem_F.update()
     sprites_personagem_F.draw(tela)
 
@@ -143,7 +141,8 @@ while rodando:
         iniciar_jogo_efeito.play()
         time.sleep(1)
         pygame.quit()
-        subprocess.Popen(["python", "Jogo-Plataforma-2D\main.py"])
+        subprocess.Popen([python_executable, caminho_main, nome_usuario])
+        subprocess.Popen.wait()
         clicked = False
 
 # Finalizar o Pygame

@@ -14,10 +14,10 @@ else:
 
 
 conn = mysql.connector.connect(
-    host="192.168.0.14",
+    host="localhost",
     port = 3306,
-    user="sql",
-    password="7891011",
+    user="root",
+    password="batatadoce0552",
     database="survival"
                 )
 
@@ -36,10 +36,14 @@ tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('UNP Survival')
 fps = pygame.time.Clock()
 
+# Caminho do Python
+python_executable = sys.executable
+
 # Diretórios dos arquivos
 diretorio_principal = os.path.dirname(__file__)
 diretorio_imagens = os.path.join(diretorio_principal, 'Assets Imagens')
 diretorio_sons = os.path.join(diretorio_principal, 'Assets Sons')
+caminho_final = os.path.join(os.path.dirname(__file__), "tela_final.py")
 
 # Variáveis que contém valores RGB.
 branco = (255, 255, 255)
@@ -132,7 +136,8 @@ def renderizar_pontos():
     tela.blit(texto_pontos, (875, 10))
 
 # Loop Principal do jogo
-while True:
+rodando = True
+while rodando:
     fps.tick(60)
     tela.blit(imagem_de_fundo, (0, 0))
     for event in pygame.event.get():
@@ -310,18 +315,14 @@ while True:
     if vidas_personagem == 0:
         morte_personagem.play() 
         time.sleep(1)
-        # Encerra o jogo
         sql = "INSERT INTO resultado (nome_jogador, pontos_jogador) VALUES (%s,%s)"
 
-                # Dados a serem inseridos (nome do jogador)
         dados = (nome_usuario,pontos_personagem)
 
-                # Executar o comando SQL
         cursor.execute(sql, dados)
-
-                # Commit da transação para salvar as alterações no banco de dados
         conn.commit()
-        subprocess.Popen(["python", "Jogo-Plataforma-2D/tela_final.py",])
-        pygame.quit()        # Fechar o cursor e a conexão
+        subprocess.Popen([python_executable, caminho_final, nome_usuario])
+        subprocess.Popen.wait()
+        pygame.quit() 
         cursor.close()
         conn.close()

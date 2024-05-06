@@ -4,10 +4,10 @@ from sys import exit, argv
 
 # Inicialização da conexão com o banco de dados
 conn = mysql.connector.connect(
-    host="192.168.0.14",
+    host="localhost",
     port = 3306,
-    user="sql",
-    password="7891011",
+    user="root",
+    password="batatadoce0552",
     database="survival"
 )
 
