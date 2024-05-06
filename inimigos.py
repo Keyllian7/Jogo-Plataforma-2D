@@ -44,7 +44,7 @@ class Vampiro(Inimigo):
     def __init__(self, vampiro_direita, vampiro_esquerda, posicao_inicial):
         super().__init__(vampiro_direita, vampiro_esquerda, posicao_inicial)
 
-        self.speed = 3
+        self.speed = 2
 
 
     def update_position(self):

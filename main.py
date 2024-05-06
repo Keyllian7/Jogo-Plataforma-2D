@@ -114,7 +114,7 @@ pulou = False
 flecha = None
 
 #variaveis para controle de vidas e pontos do personagem
-vidas_personagem = 2
+vidas_personagem = 10
 pontos_personagem = 0
 
 #variaveis para controle do tempo de invencibilidade e tempo de disparos do personagem
@@ -158,8 +158,7 @@ while rodando:
 
     # Atualiza a posição e a animação dos inimigos
     for inimigo in inimigos:
-        inimigo.update_animation()
-        inimigo.update_position()
+        inimigo.update()
 
         if isinstance(inimigo, Lobisomem,):
             inimigo.rect.y += aceleracao_y_inimigos
@@ -187,8 +186,7 @@ while rodando:
 # Atualiza a posição e a animação do zumbi em relação ao personagem
     for inimigo in inimigos:
         if not isinstance(inimigo, Zumbi):
-            inimigo.update_animation()
-            inimigo.update_position()
+            inimigo.update()
 
 # Atualiza a posição dos inimigos em relação ao personagem
     for inimigo in inimigos:
@@ -214,7 +212,7 @@ while rodando:
 
     # Verifica se é hora de fazer o respawn de um novo zumbi
     tempo_atual_zumbi = pygame.time.get_ticks()
-    if tempo_atual_zumbi - ultimo_respawn_zumbi > tempo_para_respawn * 500:
+    if tempo_atual_zumbi - ultimo_respawn_zumbi > tempo_para_respawn * 300:
             novo_zumbi = Zumbi(zumbi_direita, zumbi_esquerda, (0, 0)) 
             novo_zumbi.rect.x = random.choice([0, largura - novo_zumbi.rect.width])
             novo_zumbi.rect.y = random.randint(altura // 2, altura - novo_zumbi.rect.height)
@@ -223,7 +221,7 @@ while rodando:
     
     # Verifica se é hora de fazer o respawn de um novo vampiro
     tempo_atual_vampiro = pygame.time.get_ticks()
-    if tempo_atual_vampiro - ultimo_respawn_vampiro > tempo_para_respawn * 1000:
+    if tempo_atual_vampiro - ultimo_respawn_vampiro > tempo_para_respawn * 500:
             novo_vampiro = Vampiro(vampiro_direita, vampiro_esquerda, (0, 0)) 
             novo_vampiro.rect.x = random.randint(0, largura - novo_vampiro.rect.width)
             novo_vampiro.rect.y = 0
@@ -232,7 +230,7 @@ while rodando:
 
     # Verifica se é hora de fazer o respawn de um novo lobo
     tempo_atual_lobo = pygame.time.get_ticks()
-    if tempo_atual_lobo - ultimo_respawn_lobo > tempo_para_respawn * 700:
+    if tempo_atual_lobo - ultimo_respawn_lobo > tempo_para_respawn * 1000:
         novo_lobo = Lobisomem(lobo_direita, lobo_esquerda, (0, 0)) 
         novo_lobo.rect.x = random.choice([0, largura - novo_lobo.rect.width])
         novo_lobo.rect.y = random.randint(altura // 2, altura - novo_lobo.rect.height)

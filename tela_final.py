@@ -1,6 +1,5 @@
 import pygame, os, mysql.connector
 from pygame.locals import *
-from sys import exit, argv
 
 # Inicialização da conexão com o banco de dados
 conn = mysql.connector.connect(
