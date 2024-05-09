@@ -32,7 +32,7 @@ largura = 1000
 altura = 600
 
 # Criação da variável e argumentos para a execução da matriz.
-tela = pygame.display.set_mode((largura, altura))
+tela = pygame.display.set_mode((largura, altura),pygame.FULLSCREEN)
 pygame.display.set_caption('UNP Survival')
 
 fps = pygame.time.Clock()
