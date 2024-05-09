@@ -1,6 +1,6 @@
 import pygame
 
-class Personagem(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite):
     def __init__(self, personagem_direita, personagem_esquerda):
         pygame.sprite.Sprite.__init__(self)
         self.andar_direita = []
@@ -37,9 +37,9 @@ class Personagem(pygame.sprite.Sprite):
 
 
 
-class Masculino(Personagem):
+class Masculino(Player):
     pass
 
-class Feminino(Personagem):
+class Feminino(Player):
     pass
 

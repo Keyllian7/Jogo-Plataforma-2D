@@ -10,15 +10,15 @@ from plataformas import Plataforma
 if len(sys.argv) > 1:
     nome_usuario = sys.argv[1]
 else:
-    nome_usuario = "Grilinho"
+    nome_usuario = "Sem Nome"
 
 
 conn = mysql.connector.connect(
-    host="localhost",
-    port = 3306,
-    user="root",
-    password="batatadoce0552",
-    database="survival"
+    host="m5x.h.filess.io",
+    port = 3307,
+    user="Survival_exploreaid",
+    password="b71e5529e9fd4368499b3f6e84f0174a326708e9",
+    database="Survival_exploreaid"
                 )
 
 # Criar um cursor para executar comandos SQL
@@ -34,6 +34,7 @@ altura = 600
 # Criação da variável e argumentos para a execução da matriz.
 tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('UNP Survival')
+
 fps = pygame.time.Clock()
 
 # Caminho do Python
@@ -112,6 +113,7 @@ aceleracao_y_personagem = 0
 
 pulou = False
 flecha = None
+rodando = True
 
 #variaveis para controle de vidas e pontos do personagem
 vidas_personagem = 10
@@ -136,7 +138,6 @@ def renderizar_pontos():
     tela.blit(texto_pontos, (875, 10))
 
 # Loop Principal do jogo
-rodando = True
 while rodando:
     fps.tick(60)
     tela.blit(imagem_de_fundo, (0, 0))
