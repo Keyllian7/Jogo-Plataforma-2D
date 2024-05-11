@@ -3,11 +3,11 @@ from pygame.locals import *
 
 # Inicialização da conexão com o banco de dados
 conn = mysql.connector.connect(
-    host="m5x.h.filess.io",
-    port = 3307,
-    user="Survival_exploreaid",
-    password="b71e5529e9fd4368499b3f6e84f0174a326708e9",
-    database="Survival_exploreaid"
+    host="xeb.h.filess.io",
+    port = 3305,
+    user="a3_concerned",
+    password="f8867bf3bdb77be15d854a9e11a44a31c9927ee5",
+    database="a3_concerned"
                 )
 
 # Criar um cursor para executar comandos SQL
